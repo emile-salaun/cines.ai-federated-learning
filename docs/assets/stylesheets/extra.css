@@ -1,0 +1,454 @@
+/* =============================================================================
+   extra.css - Workshop theme on top of Material for MkDocs.
+   ============================================================================= */
+
+/* --- Palette (CINES: logo green #1f3d37) ----------------------------------- */
+:root {
+  --cines-green: #1f3d37;          /* logo */
+  --cines-green-light: #2f5a51;
+  --cines-green-dark: #142824;
+}
+
+:root,
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: var(--cines-green);
+  --md-primary-fg-color--light: var(--cines-green-light);
+  --md-primary-fg-color--dark: var(--cines-green-dark);
+  --md-accent-fg-color: #3d8b78;
+  --md-typeset-a-color: #2a6b5d;
+  --ws-hero-bg: linear-gradient(135deg, #142824 0%, #1f3d37 55%, #2f5a51 100%);
+  --ws-card-border: #e1e7e5;
+  --ws-muted: #5d6b67;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #17302b;
+  --md-primary-fg-color--light: #234740;
+  --md-primary-fg-color--dark: #0f201d;
+  --md-accent-fg-color: #6cc3a9;
+  --md-typeset-a-color: #7fcfb6;
+  --md-default-bg-color: #111816;
+  --ws-hero-bg: linear-gradient(135deg, #0f201d 0%, #17302b 55%, #234740 100%);
+  --ws-card-border: #27332f;
+  --ws-muted: #96a5a0;
+}
+
+/* --- Header: white with green logo (light), green with white logo (dark) ---- */
+[data-md-color-scheme="default"] .md-header,
+[data-md-color-scheme="default"] .md-tabs {
+  --md-primary-bg-color: var(--cines-green);
+  --md-primary-bg-color--light: rgba(31, 61, 55, 0.6);
+  background-color: #fff;
+  color: var(--cines-green);
+}
+
+[data-md-color-scheme="default"] .md-tabs {
+  border-bottom: 1px solid var(--ws-card-border);
+}
+
+[data-md-color-scheme="default"] .md-search__input {
+  background-color: #eef2f1;
+}
+
+[data-md-color-scheme="default"] .md-search__input:hover {
+  background-color: #e4eae8;
+}
+
+[data-md-color-scheme="slate"] .md-header__button.md-logo img {
+  filter: brightness(0) invert(1);
+}
+
+.md-tabs__link--active,
+.md-tabs__item--active .md-tabs__link {
+  font-weight: 600;
+}
+
+/* --- Layout proportions ------------------------------------------------------ */
+.md-grid {
+  max-width: 1180px;
+}
+
+.md-typeset {
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+
+.md-typeset h1 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.6em;
+}
+
+.md-typeset h2 {
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  margin-top: 2em;
+}
+
+/* --- Header: compact logo ---------------------------------------------------- */
+.md-header__button.md-logo {
+  padding: 0.4rem;
+  margin: 0.2rem 0.2rem 0.2rem 0;
+}
+
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 1.5rem;
+  width: auto;
+}
+
+/* --- Home: hero -------------------------------------------------------------- */
+.ws-hero {
+  background: var(--ws-hero-bg);
+  color: #fff;
+  border-radius: 0.8rem;
+  padding: 3rem 2.5rem;
+  margin: 0.5rem 0 2.5rem;
+}
+
+.ws-hero h1 {
+  color: #fff;
+  font-size: 2.1rem;
+  line-height: 1.2;
+  margin: 0 0 0.6rem;
+  max-width: 22ch;
+}
+
+.ws-hero p {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 52ch;
+  margin: 0 0 1.6rem;
+}
+
+.ws-hero .ws-hero__logo {
+  display: block;
+  height: 3.4rem;
+  width: auto;
+  margin: 0 0 1.6rem;
+}
+
+.ws-hero .ws-eyebrow {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin-bottom: 0.8rem;
+}
+
+.ws-hero .md-button {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.6);
+  margin: 0 0.5rem 0.5rem 0;
+}
+
+.ws-hero .md-button--primary {
+  background: #fff;
+  color: var(--md-primary-fg-color);
+  border-color: #fff;
+}
+
+.ws-hero .md-button:hover {
+  background: var(--md-accent-fg-color);
+  border-color: var(--md-accent-fg-color);
+  color: #fff;
+}
+
+/* --- Cards ------------------------------------------------------------------- */
+.md-typeset .grid.cards > ul > li,
+.md-typeset .grid > .card {
+  border: 1px solid var(--ws-card-border);
+  border-radius: 0.6rem;
+  padding: 1rem 1.1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.md-typeset .grid.cards > ul > li:hover {
+  border-color: var(--md-accent-fg-color);
+  box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.06);
+}
+
+.md-typeset .grid.cards > ul > li > hr {
+  margin: 0.6rem 0;
+}
+
+/* --- Badges (duration, step) ------------------------------------------------- */
+.ws-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: -0.4rem 0 1.6rem;
+}
+
+.ws-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.15rem 0.6rem;
+  border-radius: 1rem;
+  background: var(--md-code-bg-color);
+  color: var(--ws-muted);
+}
+
+.ws-badge .twemoji {
+  height: 0.9em;
+}
+
+.ws-muted {
+  color: var(--ws-muted);
+}
+
+/* --- Custom admonition: checkpoint (expected output) ------------------------ */
+:root {
+  --md-admonition-icon--checkpoint: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.4 6 14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>');
+}
+
+.md-typeset .admonition.checkpoint,
+.md-typeset details.checkpoint {
+  border-color: #2e9e6a;
+}
+
+.md-typeset .checkpoint > .admonition-title,
+.md-typeset .checkpoint > summary {
+  background-color: rgba(46, 158, 106, 0.1);
+}
+
+.md-typeset .checkpoint > .admonition-title::before,
+.md-typeset .checkpoint > summary::before {
+  background-color: #2e9e6a;
+  -webkit-mask-image: var(--md-admonition-icon--checkpoint);
+  mask-image: var(--md-admonition-icon--checkpoint);
+}
+
+/* --- Hands-on: stepper (includes/hands-on-stepper.md) ----------------------- */
+.md-typeset .ws-stepper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.8rem;
+  padding: 0.6rem 0.8rem;
+  margin: 0 0 1.8rem;
+  border: 1px solid var(--ws-card-border);
+  border-radius: 0.6rem;
+}
+
+[dir] .md-typeset .ws-stepper > ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.2rem;
+  flex: 1 1 auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: ws-step;
+}
+
+[dir] .md-typeset .ws-stepper > ul > li {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.md-typeset .ws-stepper li + li::before {          /* connector */
+  content: "";
+  width: 1rem;
+  height: 1px;
+  margin: 0 0.35rem 0 0.15rem;
+  background: var(--ws-card-border);
+}
+
+.md-typeset .ws-stepper a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.55rem 0.2rem 0.25rem;
+  border-radius: 1rem;
+  color: var(--ws-muted);
+}
+
+.md-typeset .ws-stepper li:first-child a {
+  padding-left: 0.5rem;
+}
+
+.md-typeset .ws-stepper li:not(:first-child) {
+  counter-increment: ws-step;
+}
+
+.md-typeset .ws-stepper li:not(:first-child) a::before {   /* step number */
+  content: counter(ws-step);
+  display: inline-grid;
+  place-items: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  font-size: 0.6rem;
+  border: 1.5px solid currentColor;
+}
+
+.md-typeset .ws-stepper a:hover {
+  color: var(--md-accent-fg-color);
+}
+
+.md-typeset .ws-stepper li.is-current a {
+  background: var(--md-primary-fg-color);
+  color: #fff;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .ws-stepper li.is-current a {
+  background: var(--cines-green-light);
+}
+
+.md-typeset .ws-stepper li.is-done:not(.is-current) a {
+  color: #2e9e6a;
+}
+
+.md-typeset .ws-stepper li.is-done a::before {
+  content: "\2713";
+  background: #2e9e6a;
+  border-color: #2e9e6a;
+  color: #fff;
+}
+
+/* Group chip (added by hands-on.js) */
+.md-typeset .ws-group-chip {
+  margin-left: auto;
+  padding: 0.15rem 0.65rem;
+  border-radius: 1rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  background: var(--md-code-bg-color);
+  color: var(--md-default-fg-color);
+}
+
+.md-typeset .ws-group-chip.is-unset {
+  background: rgba(230, 150, 20, 0.15);
+  color: #b36b00;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .ws-group-chip.is-unset {
+  color: #f0b04a;
+}
+
+/* --- Hands-on: group picker --------------------------------------------------- */
+.ws-picker {
+  border: 1px solid var(--ws-card-border);
+  border-radius: 0.6rem;
+  padding: 1rem 1.1rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.ws-picker__fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem 1.6rem;
+}
+
+.ws-picker label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--ws-muted);
+}
+
+.ws-picker select {
+  min-width: 9rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--ws-card-border);
+  border-radius: 0.35rem;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.ws-picker select:focus {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 1px;
+}
+
+.md-typeset .ws-picker__summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.8rem;
+  margin: 1rem 0 0.4rem;
+}
+
+.md-typeset .ws-picker__summary dt {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ws-muted);
+}
+
+.md-typeset .ws-picker__summary dd {
+  margin: 0;
+}
+
+.md-typeset .ws-picker__reset {
+  font-size: 0.6rem;
+  padding: 0.3em 0.9em;
+  margin-top: 0.4rem;
+}
+
+/* --- Hands-on: injected variables (__SUPERLINK__, ...) ------------------------ */
+.ws-var {
+  border-bottom: 1px dashed var(--md-accent-fg-color);
+}
+
+.ws-var--unset {
+  color: #b36b00;
+  border-bottom-color: currentColor;
+  cursor: help;
+}
+
+[data-md-color-scheme="slate"] .ws-var--unset {
+  color: #f0b04a;
+}
+
+/* --- Hands-on: interactive checklists ---------------------------------------- */
+.md-typeset .task-list-control input[type="checkbox"]:not([disabled]) + .task-list-indicator {
+  cursor: pointer;
+}
+
+.md-typeset .ws-checklist {
+  border-left: 0.2rem solid #2e9e6a;
+  padding: 0.1rem 0 0.1rem 1rem;
+}
+
+.md-typeset .ws-checklist .task-list-item {
+  margin-bottom: 0.3rem;
+}
+
+.md-typeset .grid.cards.ws-steps .ws-badge {
+  margin: 0 0.2rem 0.4rem 0;
+}
+
+.md-typeset .grid > .admonition {
+  margin: 0;
+}
+
+/* --- Small screens ----------------------------------------------------------- */
+@media screen and (max-width: 44.9375em) {
+  .ws-hero {
+    padding: 2rem 1.4rem;
+    border-radius: 0.6rem;
+  }
+  .ws-hero h1 {
+    font-size: 1.6rem;
+  }
+  .md-typeset .ws-stepper li + li::before {
+    display: none;
+  }
+  .md-typeset .ws-group-chip {
+    margin-left: 0;
+  }
+}

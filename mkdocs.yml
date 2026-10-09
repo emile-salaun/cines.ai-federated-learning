@@ -1,0 +1,103 @@
+# =============================================================================
+# mkdocs.yml - Workshop site (GitHub Pages), built by .github/workflows/docs.yml
+#
+# Local preview (from the repository root):
+#   pip install -r requirements-docs.txt
+#   mkdocs serve            # http://127.0.0.1:8000
+# =============================================================================
+site_name: Federated Learning Workshop
+site_description: Hands-on federated learning
+site_url: https://emile-salaun.github.io/cines.ai-federated-learning
+repo_url: https://github.com/emile-salaun/cines.ai-federated-learning
+repo_name: emile-salaun/cines.ai-federated-learning
+edit_uri: edit/docs/docs/
+copyright: CINES — Federated Learning Workshop
+
+theme:
+  name: material
+  language: en
+  logo: assets/images/cines-mark.svg
+  favicon: assets/images/cines-favicon.svg
+  icon:
+    repo: fontawesome/brands/github
+  font:
+    text: Inter
+    code: JetBrains Mono
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - navigation.footer
+    - navigation.top
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+
+extra_css:
+  - assets/stylesheets/extra.css
+
+extra_javascript:
+  - assets/javascripts/groups.js       # EDIT on the day: groups and SuperLink addresses
+  - assets/javascripts/hands-on.js
+
+# Snippets shared between pages (e.g. the hands-on stepper), outside docs/.
+watch:
+  - includes
+
+nav:
+  - Home: index.md
+  - Setup: setup.md
+  - Concepts: concepts.md
+  - Demo: demo.md
+  - Hands-on:
+      - hands-on/index.md
+      - 1. Local simulation: hands-on/01-simulation.md
+      - 2. Group deployment: hands-on/02-deployment.md
+      - 3. Experiments: hands-on/03-experiments.md
+      - 4. Debrief: hands-on/04-debrief.md
+  - Resources: resources.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path: [includes]
+      check_paths: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
