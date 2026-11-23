@@ -66,9 +66,26 @@ section .kicker {
   margin-bottom: 0.4em;
 }
 
-/* Footer link back to the site */
-section footer a { color: inherit; text-decoration: none; font-weight: 600; }
+/* Footer and page number */
+section footer,
+section::after {
+  font-size: 0.5em;
+  color: var(--muted);
+}
+
+/* Footer link back to the site: web only, hidden in the PDF */
+section footer a {
+  font-size: 0.85em;
+  font-weight: 600;
+  color: inherit;
+  text-decoration: none;
+  margin-right: 3em;
+}
 section footer a:hover { text-decoration: underline; }
+
+@media print {
+  section footer a { display: none; }
+}
 
 /* --- Title slide: <!-- _class: title --> ---------------------------------- */
 section.title {
