@@ -16,6 +16,7 @@ on:
       - "zensical.toml"
       - "requirements-docs.txt"
       - ".github/workflows/docs.yml"
+      - "slides/**"
   pull_request:
     paths:
       - "docs/**"
@@ -23,6 +24,7 @@ on:
       - "zensical.toml"
       - "requirements-docs.txt"
       - ".github/workflows/docs.yml"
+      - "slides/**"
   workflow_dispatch:
 
 permissions:
@@ -51,7 +53,7 @@ jobs:
       - name: Build site
         run: zensical build --clean --strict
 
-            - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: "22"
 
