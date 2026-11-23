@@ -15,7 +15,7 @@ footer: "[← Workshop site](../concepts/) CINES · Federated Learning Workshop"
 # Federated learning
 ## Train where the data lives
 
-Concepts · Demo on Adastra · Hands-on with Flower
+Concepts · Demo across two HPC centres · Hands-on with Flower
 
 <!--
 Speaker notes (0:00 to 0:20)
@@ -68,7 +68,7 @@ Speaker notes (0:20 to 1:00)
 
 <div class="timeline">
 <div class="slot talk now"><span class="time">30′</span><span><span class="what">Talk</span><br><span class="detail">Concepts, frameworks, FL on HPC</span></span></div>
-<div class="slot demo"><span class="time">15′</span><span><span class="what">Demo</span><br><span class="detail">NVIDIA FLARE on Adastra</span></span></div>
+<div class="slot demo"><span class="time">15′</span><span><span class="what">Demo</span><br><span class="detail">NVIDIA FLARE across two HPC centres</span></span></div>
 <div class="slot break"><span class="time">15′</span><span><span class="what">Break</span><br><span class="detail">Form your group</span></span></div>
 <div class="slot handson"><span class="time">60′</span><span><span class="what">Hands-on</span><br><span class="detail">Flower, in groups of 4–5: one federation per group, your notebook is one client</span></span></div>
 </div>
@@ -80,6 +80,137 @@ Speaker notes (1:00 to 1:30)
 - The talk gives the vocabulary; the hands-on lets you find the numbers yourselves.
 - Keep a question in mind for the debrief: which data split will hurt the most?
 -->
+
+---
+
+<!-- _class: draft -->
+
+<span class="kicker">What is FL and why <em>4 min</em></span>
+
+## Move the model, not the data
+
+<div class="stage">
+<div class="grid-2">
+<div class="diagram"><svg viewBox="0 0 420 270" font-family="Inter, system-ui, sans-serif"><rect x="130" y="14" width="160" height="70" rx="14" fill="#1f3d37"/><g transform="translate(146 30) scale(1.5)" fill="none" stroke="#8fd3be" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></g><text x="236" y="56" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">All data</text><path d="M72 180 L210 92" stroke="#c9803a" stroke-width="3" fill="none" marker-end="url(#ah1)"/><path d="M210 180 L210 92" stroke="#c9803a" stroke-width="3" fill="none" marker-end="url(#ah1)"/><path d="M348 180 L210 92" stroke="#c9803a" stroke-width="3" fill="none" marker-end="url(#ah1)"/><rect x="20" y="182" width="104" height="70" rx="12" fill="#fff" stroke="#3d8b78" stroke-width="2.5"/><g transform="translate(34 200) scale(1.4)" fill="none" stroke="#1f3d37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></g><text x="96" y="224" text-anchor="middle" font-size="15" font-weight="600" fill="#1f3d37">Site A</text><rect x="158" y="182" width="104" height="70" rx="12" fill="#fff" stroke="#3d8b78" stroke-width="2.5"/><g transform="translate(172 200) scale(1.4)" fill="none" stroke="#1f3d37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></g><text x="234" y="224" text-anchor="middle" font-size="15" font-weight="600" fill="#1f3d37">Site B</text><rect x="296" y="182" width="104" height="70" rx="12" fill="#fff" stroke="#3d8b78" stroke-width="2.5"/><g transform="translate(310 200) scale(1.4)" fill="none" stroke="#1f3d37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></g><text x="372" y="224" text-anchor="middle" font-size="15" font-weight="600" fill="#1f3d37">Site C</text><defs><marker id="ah1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c9803a"/></marker></defs><text x="300" y="130" font-size="15" font-weight="700" fill="#c9803a">data copied</text></svg><div class="cap"><b>Centralised</b>: copy every dataset to one place</div></div>
+<div class="diagram"><svg viewBox="0 0 420 270" font-family="Inter, system-ui, sans-serif"><rect x="130" y="14" width="160" height="70" rx="14" fill="#1f3d37"/><rect x="150" y="38" width="40" height="18" rx="5" fill="#8fd3be"/><text x="246" y="56" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">Model</text><path d="M200 90 L64 176" stroke="#3d8b78" stroke-width="3" fill="none" marker-end="url(#ah2)"/><path d="M82 176 L222 92" stroke="#3d8b78" stroke-width="2.5" stroke-dasharray="6 5" fill="none"/><path d="M200 90 L202 176" stroke="#3d8b78" stroke-width="3" fill="none" marker-end="url(#ah2)"/><path d="M220 176 L222 92" stroke="#3d8b78" stroke-width="2.5" stroke-dasharray="6 5" fill="none"/><path d="M200 90 L340 176" stroke="#3d8b78" stroke-width="3" fill="none" marker-end="url(#ah2)"/><path d="M358 176 L222 92" stroke="#3d8b78" stroke-width="2.5" stroke-dasharray="6 5" fill="none"/><rect x="20" y="182" width="104" height="70" rx="12" fill="#fff" stroke="#3d8b78" stroke-width="2.5"/><g transform="translate(34 200) scale(1.4)" fill="none" stroke="#1f3d37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></g><text x="96" y="224" text-anchor="middle" font-size="15" font-weight="600" fill="#1f3d37">Site A</text><g transform="translate(102 170) scale(0.9)" fill="#fff" stroke="#3d8b78" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="13" fill="#e6f0ed" stroke="none"/><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></g><rect x="86" y="232" width="28" height="12" rx="4" fill="#8fd3be"/><rect x="158" y="182" width="104" height="70" rx="12" fill="#fff" stroke="#3d8b78" stroke-width="2.5"/><g transform="translate(172 200) scale(1.4)" fill="none" stroke="#1f3d37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></g><text x="234" y="224" text-anchor="middle" font-size="15" font-weight="600" fill="#1f3d37">Site B</text><g transform="translate(240 170) scale(0.9)" fill="#fff" stroke="#3d8b78" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="13" fill="#e6f0ed" stroke="none"/><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></g><rect x="224" y="232" width="28" height="12" rx="4" fill="#8fd3be"/><rect x="296" y="182" width="104" height="70" rx="12" fill="#fff" stroke="#3d8b78" stroke-width="2.5"/><g transform="translate(310 200) scale(1.4)" fill="none" stroke="#1f3d37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></g><text x="372" y="224" text-anchor="middle" font-size="15" font-weight="600" fill="#1f3d37">Site C</text><g transform="translate(378 170) scale(0.9)" fill="#fff" stroke="#3d8b78" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="13" fill="#e6f0ed" stroke="none"/><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></g><rect x="362" y="232" width="28" height="12" rx="4" fill="#8fd3be"/><defs><marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3d8b78"/></marker></defs><text x="300" y="130" font-size="15" font-weight="700" fill="#3d8b78">model out,</text><text x="300" y="150" font-size="15" font-weight="700" fill="#3d8b78">weights back</text></svg><div class="cap"><b>Federated</b>: each site keeps its data, only weights travel</div></div>
+</div>
+<div class="band">The data never leaves a site. <strong>What travels is the model.</strong></div>
+</div>
+
+---
+
+<!-- _class: draft -->
+
+<span class="kicker">What is FL and why <em>4 min</em></span>
+
+## Two flavours of federated learning
+
+<div class="stage">
+<div class="grid-2">
+<div class="tile hl"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1f3d37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></div><span class="tag">Today's workshop</span><h3>Cross-silo</h3>
+<ul><li>A few institutions: hospitals, labs, HPC centres</li><li>Large datasets per client</li><li>Reliable, scheduled participants</li></ul></div>
+<div class="tile"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1f3d37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div><span class="tag">At scale</span><h3>Cross-device</h3>
+<ul><li>Millions of phones or sensors</li><li>Small datasets per client</li><li>Clients come and go</li></ul></div>
+</div>
+</div>
+
+---
+
+<!-- _class: draft -->
+
+<span class="kicker">What is FL and why <em>4 min</em></span>
+
+## Federated is not private by default
+
+<div class="stage">
+<div class="grid-3">
+<div class="tile "><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1f3d37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div><span class="tag">The risk</span><h3>Updates can leak</h3><p>Model weights still carry traces of the training data.</p></div>
+<div class="tile "><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1f3d37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div><span class="tag">Defence</span><h3>Secure aggregation</h3><p>The server only sees the sum of the updates, never one client's.</p></div>
+<div class="tile "><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1f3d37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12c2-6 4 6 6 0s4 6 6 0 4 6 6 0"/></svg></div><span class="tag">Defence</span><h3>Differential privacy</h3><p>Calibrated noise on what leaves a site bounds what can be learned.</p></div>
+</div>
+<div class="band">FL is <strong>one layer</strong> of a privacy design, not the whole design.</div>
+</div>
+
+---
+
+<span class="kicker">Non-IID data <em>5.5 min</em></span>
+
+## How different are the clients' data?
+
+<div class="play">
+<div class="widget alpha-widget" data-alpha="0.1" data-seed="42"></div>
+<div class="explain">
+
+Each cell: how many images of one class a client holds.
+
+**α** is the knob. Large α: everyone has the same mix. Small α: each client has a few classes, and sizes become unequal.
+
+The exercises use **α = 0.1**.
+
+<div class="hint">Slide α from 0.1 up to 100, then down to 0.03.</div>
+
+<span class="tiny">Same scheme as Flower Datasets' Dirichlet partitioner. Illustration, not the exact hands-on split.</span>
+
+</div>
+</div>
+
+---
+
+<span class="kicker">Non-IID data <em>5.5 min</em></span>
+
+## Your prediction
+
+<p class="lead">Rank the three splits by final accuracy, from best to worst. Show of hands now, we check at the debrief.</p>
+
+<div class="stage">
+<div class="grid-3">
+<div class="tile"><span class="tag">A</span><h3>IID</h3><div class="pict"><i style="background:#3d8b78"></i><i style="background:#3d8b78"></i><i style="background:#3d8b78"></i><i style="background:#3d8b78"></i><i style="background:#3d8b78"></i></div><p>Every client has the same mix of classes.</p></div>
+<div class="tile"><span class="tag">B</span><h3>Dirichlet α = 0.1</h3><div class="pict"><i style="background:#1f3d37"></i><i style="background:#8fd3be"></i><i style="background:#2f5a51"></i><i style="background:#c9d6d2"></i><i style="background:#3d8b78"></i></div><p>Very uneven mixes and sizes.</p></div>
+<div class="tile"><span class="tag">C</span><h3>Pathological</h3><div class="pict"><i style="background:#1f3d37"></i><i style="background:#eef2f1"></i><i style="background:#eef2f1"></i><i style="background:#1f3d37"></i><i style="background:#eef2f1"></i></div><p>Only 2 classes per client.</p></div>
+</div>
+</div>
+
+---
+
+<!-- _class: draft -->
+
+<span class="kicker">FL on HPC <em>5 min</em></span>
+
+## Who is doing it (2026)
+
+<div class="stage">
+<div class="grid-2 compact">
+<div class="tile "><span class="tag">US DOE</span><h3>Argonne</h3><p>APPFL across Polaris, Aurora, Frontier and Perlmutter, 64 nodes each. Asynchronous aggregation against queue waits.</p></div>
+<div class="tile "><span class="tag">US DOE</span><h3>ORNL</h3><p>96 FL clients on Frontier. Orchestration, not the model, limits scaling.</p></div>
+<div class="tile "><span class="tag">Europe</span><h3>EuroHPC xFFL and IT4LIA</h3><p>MareNostrum 5 and Cineca: federated LLM training across supercomputers, as a service.</p></div>
+<div class="tile dark"><span class="tag">This workshop</span><h3>Today's demo</h3><p>NVIDIA FLARE across Adastra and a second European centre.</p></div>
+</div>
+<span class="tiny">Sources: arXiv 2603.19544 · EuroMLSys 2026 · arXiv 2605.02125 · eurohpc-ju.europa.eu · it4lia-aifactory.eu</span>
+</div>
+
+---
+
+<!-- _class: draft -->
+
+<span class="kicker">Demo <em>15 min</em></span>
+
+## Federated learning across two HPC centres
+
+<div class="play">
+<div class="diagram"><svg viewBox="0 0 640 280" font-family="Inter, system-ui, sans-serif"><rect x="10" y="20" width="290" height="240" rx="18" fill="#f6f9f8" stroke="#e1e7e5" stroke-width="2"/><text x="30" y="52" font-size="18" font-weight="700" fill="#1f3d37">Adastra</text><text x="30" y="74" font-size="13" fill="#5d6b67">CINES</text><rect x="340" y="20" width="290" height="240" rx="18" fill="#f6f9f8" stroke="#e1e7e5" stroke-width="2"/><text x="360" y="52" font-size="18" font-weight="700" fill="#1f3d37">Partner centre</text><text x="360" y="74" font-size="13" fill="#5d6b67">LUMI or Jean Zay (TBD)</text><rect x="40" y="100" width="150" height="56" rx="12" fill="#1f3d37"/><text x="115" y="133" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">FLARE server</text><rect x="40" y="180" width="150" height="50" rx="12" fill="#fff" stroke="#3d8b78" stroke-width="2.5"/><text x="115" y="210" text-anchor="middle" font-size="14" font-weight="600" fill="#1f3d37">site-1 job</text><path d="M115 180 L115 160" stroke="#3d8b78" stroke-width="2.5" marker-end="url(#ah4)"/><rect x="420" y="110" width="150" height="50" rx="12" fill="#fff" stroke="#3d8b78" stroke-width="2.5"/><text x="495" y="140" text-anchor="middle" font-size="14" font-weight="600" fill="#1f3d37">site-2 job</text><path d="M420 135 L196 128" stroke="#3d8b78" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#ah4)"/><rect x="420" y="180" width="150" height="50" rx="12" fill="#fff" stroke="#3d8b78" stroke-width="2.5"/><text x="495" y="210" text-anchor="middle" font-size="14" font-weight="600" fill="#1f3d37">site-3 job</text><path d="M420 205 L196 128" stroke="#3d8b78" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#ah4)"/><defs><marker id="ah4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3d8b78"/></marker></defs></svg><div class="cap">Clients open <b>outbound</b> connections to the FLARE server. The data stay in each centre.</div></div>
+<div class="explain">
+
+**Watch for**
+
+- the clients of both centres joining
+- the metric improving round after round
+
+<div class="video"><div class="play-btn"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg></div>Backup video (TBD)</div>
+
+<div class="todo">TODO: partner centre (LUMI or Jean Zay), job, metric, backup video.</div>
+
+</div>
+</div>
 
 ---
 
@@ -96,39 +227,61 @@ Speaker notes (1:00 to 1:30)
 <div><b>3</b> Members <span>open <code>member.ipynb</code></span></div>
 </div>
 
-<script>
-(() => {
-  // Break countdown: starts when its slide is shown, click = pause/resume, double-click = reset.
-  // Without JavaScript (PDF, static view) the slide simply shows "15:00".
-  document.querySelectorAll('.countdown').forEach((el) => {
-    if (el.dataset.ready) return;
-    el.dataset.ready = '1';
-    const total = Number(el.dataset.minutes || 15) * 60;
-    let left = total, timer = null, started = false;
-    const show = () => {
-      const m = Math.floor(left / 60), s = left % 60;
-      el.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-      el.classList.toggle('ending', left <= 60);
-      el.classList.toggle('done', left === 0);
-    };
-    const tick = () => { if (left > 0) { left -= 1; show(); } else { stop(); } };
-    const start = () => { if (!timer && left > 0) timer = setInterval(tick, 1000); };
-    const stop = () => { clearInterval(timer); timer = null; };
-    el.addEventListener('click', (e) => { e.stopPropagation(); timer ? stop() : start(); });
-    el.addEventListener('dblclick', (e) => { e.stopPropagation(); stop(); left = total; show(); });
-    // Start automatically the first time the slide becomes visible (bespoke HTML only).
-    const io = new IntersectionObserver((entries) => {
-      if (!started && entries.some((x) => x.isIntersecting) && document.querySelector('.bespoke-marp-parent')) {
-        started = true; start();
-      }
-    });
-    io.observe(el);
-  });
-})();
-</script>
 
 <!--
 Speaker notes (after the demo)
 - Show this slide as soon as the demo ends: the countdown starts on its own.
 - Click the timer to pause it, double-click to reset.
 -->
+
+---
+
+<!-- _class: clock -->
+
+<div class="progress"><i class="on"></i><i class=""></i><i class=""></i></div>
+
+<span class="kicker">Hands-on · step 1 of 3 · timing TBD</span>
+
+## Group deployment
+
+<div class="stage">
+<div class="countdown" data-minutes="20" title="Click: pause / resume · Double-click: reset">20:00</div>
+<ul><li>Lead: start the SuperLink, then the run</li><li>Members: start your SuperNode</li><li><strong>Done when</strong> your group sees round 1</li></ul>
+</div>
+
+---
+
+<!-- _class: clock -->
+
+<div class="progress"><i class="done"></i><i class="on"></i><i class=""></i></div>
+
+<span class="kicker">Hands-on · step 2 of 3 · timing TBD</span>
+
+## Experiments
+
+<div class="stage">
+<div class="countdown" data-minutes="30" title="Click: pause / resume · Double-click: reset">30:00</div>
+<ul><li>Change <strong>only</strong> <code>--run-config</code></li><li>Note your results in the table on the site</li><li><strong>Done when</strong> your group has run A, B and C</li></ul>
+</div>
+
+---
+
+<!-- _class: clock -->
+
+
+
+<span class="kicker">Hands-on · plan B</span>
+
+## Switch to the local simulation
+
+<div class="stage">
+
+<ul><li>Same app, same experiments, <strong>5 virtual clients</strong> in one notebook</li><li>Runs on the hub, on Colab, or on your laptop</li><li>Your results stay comparable with the other groups</li></ul>
+</div>
+
+<!--
+Speaker notes
+- Use only if the hub or the room network fails. Switch criterion: TBD.
+-->
+
+<script src="widgets.js"></script>

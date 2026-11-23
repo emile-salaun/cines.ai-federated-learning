@@ -61,7 +61,7 @@ jobs:
         run: |
           MARP="npx --yes @marp-team/marp-cli@4.5.1"
           mkdir -p site/slides
-          cp -r slides/images site/slides/
+          cp -r slides/images slides/widgets.js site/slides/
           $MARP --html --theme-set slides/themes -o site/slides/index.html -- slides/talk.md
           $MARP --html --allow-local-files --theme-set slides/themes --pdf -o site/slides/talk.pdf -- slides/talk.md
 
