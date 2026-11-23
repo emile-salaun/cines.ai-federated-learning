@@ -1,0 +1,11 @@
+run,dataset,partitioning,alpha,lr,epochs,mu,rounds,acc_r1,acc_r5,acc_final,acc_best,sec_per_round,warmup_s,total_s
+cifar10_dir0.1,cifar10,dirichlet,0.1,0.01,2,0.0,10,0.2526,0.544,0.5464,0.5558,6.1,29.7,85.9
+cifar10_dir0.3,cifar10,dirichlet,0.3,0.01,2,0.0,10,0.2256,0.4778,0.5303,0.5338,3.3,27.3,57.7
+cifar10_dir1.0,cifar10,dirichlet,1.0,0.01,2,0.0,10,0.3748,0.5799,0.6227,0.6227,3.1,28.2,56.7
+cifar10_iid,cifar10,iid,,0.01,2,0.0,10,0.4147,0.5668,0.6101,0.6125,2.8,31.1,57.1
+cifar10_patho2,cifar10,pathological,,0.01,2,0.0,10,0.1,0.2154,0.3216,0.3216,2.8,27.0,52.8
+fashion_mnist_dir0.1,fashion_mnist,dirichlet,0.1,0.01,2,0.0,10,0.6745,0.8197,0.8465,0.8465,4.7,29.4,71.9
+fashion_mnist_dir0.3,fashion_mnist,dirichlet,0.3,0.01,2,0.0,10,0.7047,0.8302,0.8655,0.866,2.5,31.7,55.0
+fashion_mnist_dir1.0,fashion_mnist,dirichlet,1.0,0.01,2,0.0,10,0.7419,0.8684,0.8891,0.8891,2.5,27.4,50.3
+fashion_mnist_iid,fashion_mnist,iid,,0.01,2,0.0,10,0.7941,0.8689,0.8895,0.8895,2.1,25.8,45.2
+fashion_mnist_patho2,fashion_mnist,pathological,,0.01,2,0.0,10,0.1333,0.4849,0.5357,0.5711,2.2,27.0,46.8

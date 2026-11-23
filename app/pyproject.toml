@@ -1,0 +1,76 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fl-workshop"
+version = "0.1.0"
+description = "Federated learning workshop with Flower: hands-on app (deployed mode and simulation fallback)"
+license = { file = "LICENSE" }    # required by Flower (fab-format-version = 1); copy of ../LICENSE
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "flwr[simulation]>=1.39.0,<1.40.0",
+    "flwr-datasets[vision]==0.6.1",
+    "torch==2.14.1",
+    "torchvision==0.29.1",
+]
+
+[dependency-groups]
+# Hands-on notebooks: uv sync --project app --group notebook
+notebook = [
+    "jupyterlab==4.6.6",
+    "ipykernel==7.4.0",
+    "matplotlib==3.11.2",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["flworkshop"]
+
+# --- Flower app ---------------------------------------------------------------
+
+[tool.flwr.app]
+publisher = "workshop"
+fab-format-version = 1
+flwr-version-target = "1.39.0"
+
+[tool.flwr.app.components]
+serverapp = "flworkshop.server_app:app"
+clientapp = "flworkshop.client_app:app"
+
+[tool.flwr.app.config]
+# Training
+num-server-rounds = 10
+fraction-train = 1.0           # share of clients sampled for training each round
+fraction-evaluate = 1.0
+dropout-rate = 0.0             # probability that a sampled client "disconnects" during a round
+local-epochs = 2
+learning-rate = 0.01            # 0.1 diverges (calibration)
+batch-size = 32
+proximal-mu = 0.0              # > 0: FedProx proximal term
+save-model = false
+results-file = ""              # absolute path of a per-round results JSON; empty = disabled
+# Data (files produced by scripts/prepare_data.py)
+data-dir = ""                  # empty: ~/.cache/fl-workshop
+dataset = "fashion_mnist"      # "fashion_mnist" | "cifar10"
+partitioning = "iid"           # "iid" | "dirichlet" | "pathological"
+dirichlet-alpha = 0.1          # smaller = more unbalanced
+classes-per-partition = 2      # for "pathological"
+seed = 42
+
+# --- uv: CPU-only PyTorch and supported platforms -----------------------------
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu", marker = "sys_platform != 'darwin'" }]
+torchvision = [{ index = "pytorch-cpu", marker = "sys_platform != 'darwin'" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv]
+environments = [
+    "sys_platform == 'linux'",
+    "sys_platform == 'darwin' and platform_machine == 'arm64'",
+    "sys_platform == 'win32' and platform_machine == 'AMD64'",
+]

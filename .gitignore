@@ -1,0 +1,23 @@
+# Python / uv
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Run outputs and data (never committed)
+results/
+final_model.pt
+*.pt
+*.log
+*.tmp
+
+# Site build
+site/
+.cache/
+
+# Secrets and NVFLARE startup kits
+.env
+*.key
+*.pem
+*.crt
+startup/

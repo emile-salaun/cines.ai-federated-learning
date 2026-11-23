@@ -1,0 +1,9 @@
+run,dataset,partitioning,alpha,lr,epochs,mu,rounds,acc_r1,acc_r5,acc_final,acc_best,sec_per_round,warmup_s,total_s
+cifar10_dir0.1_mu0.0,cifar10,dirichlet,0.1,0.01,2,0.0,10,0.2526,0.544,0.5464,0.5558,6.1,30.7,86.3
+cifar10_dir0.1_mu0.01,cifar10,dirichlet,0.1,0.01,2,0.01,10,0.2661,0.5281,0.5618,0.5618,6.5,29.1,88.2
+cifar10_dir0.1_mu0.1,cifar10,dirichlet,0.1,0.01,2,0.1,10,0.2216,0.4019,0.4449,0.4449,6.7,30.5,92.1
+cifar10_dir0.1_mu1.0,cifar10,dirichlet,0.1,0.01,2,1.0,10,0.1181,0.1678,0.2525,0.2525,6.7,29.2,90.8
+fashion_mnist_dir0.1_mu0.0,fashion_mnist,dirichlet,0.1,0.01,2,0.0,10,0.6745,0.8197,0.8465,0.8465,4.7,30.6,73.6
+fashion_mnist_dir0.1_mu0.01,fashion_mnist,dirichlet,0.1,0.01,2,0.01,10,0.6578,0.7988,0.8448,0.8448,5.5,31.2,80.8
+fashion_mnist_dir0.1_mu0.1,fashion_mnist,dirichlet,0.1,0.01,2,0.1,10,0.4474,0.7048,0.7489,0.7531,5.6,31.2,82.2
+fashion_mnist_dir0.1_mu1.0,fashion_mnist,dirichlet,0.1,0.01,2,1.0,10,0.3857,0.5157,0.6335,0.6398,5.5,35.4,86.2

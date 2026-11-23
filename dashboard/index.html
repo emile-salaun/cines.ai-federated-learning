@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Federated learning workshop</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <span class="brand">Federated learning workshop</span>
+    <nav class="tabs" role="tablist" aria-label="Views">
+      <button class="tab" role="tab" data-view="together">Solo or together?</button>
+      <button class="tab" role="tab" data-view="run">The run</button>
+      <button class="tab" role="tab" data-view="network">Network</button>
+      <button class="tab" role="tab" data-view="compare">Compare</button>
+    </nav>
+    <div class="runpick">
+      <label for="run" class="note">Run</label>
+      <select id="run"></select>
+      <span id="live" class="live"><span class="dot"></span><span class="txt">—</span></span>
+    </div>
+  </header>
+  <main id="view" aria-live="polite"></main>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+# =============================================================================
+# zensical.toml - Workshop site (GitHub Pages), built by .github/workflows/docs.yml
+#
+# Local preview (from the repository root):
+#   pip install -r requirements-docs.txt
+#   zensical serve          # http://127.0.0.1:8000
+# =============================================================================
+[project]
+site_name = "Federated Learning Workshop"
+site_description = "Hands-on federated learning"
+site_url = "https://emile-salaun.github.io/cines.ai-federated-learning/"
+repo_url = "https://github.com/emile-salaun/cines.ai-federated-learning"
+repo_name = "emile-salaun/cines.ai-federated-learning"
+edit_uri = "edit/main/docs/"
+copyright = "CINES — Federated Learning Workshop"
+
+extra_css = ["assets/stylesheets/extra.css"]
+extra_javascript = [
+  "assets/javascripts/groups.js",    # EDIT on the day: groups and SuperLink addresses
+  "assets/javascripts/hands-on.js",
+]
+
+nav = [
+  { "Home" = "index.md" },
+  { "Setup" = "setup.md" },
+  { "Concepts" = "concepts.md" },
+  { "Demo" = "demo.md" },
+  { "Hands-on" = [
+    "hands-on/index.md",
+    { "1. Group deployment" = "hands-on/01-deployment.md" },
+    { "2. Experiments" = "hands-on/02-experiments.md" },
+    { "3. Debrief" = "hands-on/03-debrief.md" },
+    { "Fallback: local simulation" = "hands-on/fallback-simulation.md" },
+  ] },
+  { "Resources" = "resources.md" },
+]
+
+[project.theme]
+variant = "classic"                  # required: extra.css targets the classic layout
+language = "en"
+logo = "assets/images/cines-mark.svg"
+favicon = "assets/images/cines-favicon.svg"
+icon.repo = "fontawesome/brands/github"
+font.text = "Inter"
+font.code = "JetBrains Mono"
+features = [
+  "navigation.tabs",
+  "navigation.sections",
+  "navigation.indexes",
+  "navigation.footer",
+  "navigation.top",
+  "toc.follow",
+  "search.suggest",
+  "search.highlight",
+  "content.code.copy",
+  "content.code.annotate",
+  "content.tabs.link",
+]
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+primary = "custom"
+accent = "custom"
+toggle.icon = "material/weather-night"
+toggle.name = "Dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+primary = "custom"
+accent = "custom"
+toggle.icon = "material/weather-sunny"
+toggle.name = "Light mode"
+
+[project.markdown_extensions]
+admonition = {}
+attr_list = {}
+md_in_html = {}
+tables = {}
+toc.permalink = true
+pymdownx.details = {}
+pymdownx.superfences.custom_fences = [
+  { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" },
+]
+pymdownx.highlight.anchor_linenums = true
+pymdownx.inlinehilite = {}
+pymdownx.snippets.base_path = ["includes"]   # shared snippets (hands-on stepper), outside docs/
+pymdownx.snippets.check_paths = true
+pymdownx.tabbed.alternate_style = true
+pymdownx.tasklist.custom_checkbox = true
+pymdownx.emoji.emoji_index = "zensical.extensions.emoji.twemoji"
+pymdownx.emoji.emoji_generator = "zensical.extensions.emoji.to_svg"
