@@ -4,7 +4,7 @@ theme: cines
 paginate: true
 size: 16:9
 title: Federated Learning Workshop
-footer: "[← Workshop site](../concepts/) · CINES · Federated Learning Workshop"
+footer: "[← Workshop site](../concepts/) CINES · Federated Learning Workshop"
 ---
 
 <!-- _class: title -->
@@ -79,4 +79,56 @@ By the end, your group will have trained a model **together**, without sharing a
 Speaker notes (1:00 to 1:30)
 - The talk gives the vocabulary; the hands-on lets you find the numbers yourselves.
 - Keep a question in mind for the debrief: which data split will hurt the most?
+-->
+
+---
+
+<!-- _class: break -->
+<!-- _paginate: false -->
+
+<span class="kicker">Break · 15 min</span>
+
+<div class="countdown" data-minutes="15" title="Click: pause / resume · Double-click: reset">15:00</div>
+
+<div class="break-steps">
+<div><b>1</b> Find your group <span>4–5 people, see the site</span></div>
+<div><b>2</b> Group lead <span>opens <code>lead.ipynb</code></span></div>
+<div><b>3</b> Members <span>open <code>member.ipynb</code></span></div>
+</div>
+
+<script>
+(() => {
+  // Break countdown: starts when its slide is shown, click = pause/resume, double-click = reset.
+  // Without JavaScript (PDF, static view) the slide simply shows "15:00".
+  document.querySelectorAll('.countdown').forEach((el) => {
+    if (el.dataset.ready) return;
+    el.dataset.ready = '1';
+    const total = Number(el.dataset.minutes || 15) * 60;
+    let left = total, timer = null, started = false;
+    const show = () => {
+      const m = Math.floor(left / 60), s = left % 60;
+      el.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      el.classList.toggle('ending', left <= 60);
+      el.classList.toggle('done', left === 0);
+    };
+    const tick = () => { if (left > 0) { left -= 1; show(); } else { stop(); } };
+    const start = () => { if (!timer && left > 0) timer = setInterval(tick, 1000); };
+    const stop = () => { clearInterval(timer); timer = null; };
+    el.addEventListener('click', (e) => { e.stopPropagation(); timer ? stop() : start(); });
+    el.addEventListener('dblclick', (e) => { e.stopPropagation(); stop(); left = total; show(); });
+    // Start automatically the first time the slide becomes visible (bespoke HTML only).
+    const io = new IntersectionObserver((entries) => {
+      if (!started && entries.some((x) => x.isIntersecting) && document.querySelector('.bespoke-marp-parent')) {
+        started = true; start();
+      }
+    });
+    io.observe(el);
+  });
+})();
+</script>
+
+<!--
+Speaker notes (after the demo)
+- Show this slide as soon as the demo ends: the countdown starts on its own.
+- Click the timer to pause it, double-click to reset.
 -->
