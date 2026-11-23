@@ -5,7 +5,8 @@
   <span class="ws-badge">:material-school-outline: Talk</span>
 </div>
 
-[:material-presentation: Slides](#){ .md-button }  <!-- TODO: link to slides -->
+[:material-presentation: Slides](slides/){ .md-button .md-button--primary }
+[:material-file-pdf-box: PDF](slides/talk.pdf){ .md-button }
 
 ## Why federated learning?
 

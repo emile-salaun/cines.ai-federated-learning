@@ -51,6 +51,18 @@ jobs:
       - name: Build site
         run: zensical build --clean --strict
 
+            - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+
+      - name: Build slides (HTML + PDF)
+        run: |
+          MARP="npx --yes @marp-team/marp-cli@4.5.1"
+          mkdir -p site/slides
+          cp -r slides/images site/slides/
+          $MARP --html --theme-set slides/themes -o site/slides/index.html -- slides/talk.md
+          $MARP --html --allow-local-files --theme-set slides/themes --pdf -o site/slides/talk.pdf -- slides/talk.md
+
       - name: Upload site
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v4
