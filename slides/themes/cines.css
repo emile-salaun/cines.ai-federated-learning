@@ -181,3 +181,53 @@ section.title footer { color: rgba(255, 255, 255, 0.7); }
 .slot.handson  { flex: 60; background: var(--accent); }
 
 .slot.now { outline: 4px solid #8fd3be; outline-offset: 3px; }
+
+/* --- Break slide with countdown: <!-- _class: break --> ------------------ */
+section.break {
+  background: linear-gradient(135deg, #142824 0%, #1f3d37 55%, #2f5a51 100%);
+  color: #fff;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+section.break::before { display: none; }
+section.break .kicker { color: #8fd3be; font-size: 0.8em; }
+section.break footer { color: rgba(255, 255, 255, 0.7); }
+
+.countdown {
+  font-size: 5.6em;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  margin: 0.15em 0 0.45em;
+  cursor: pointer;
+  user-select: none;
+}
+.countdown.ending { color: #f2c46d; }
+.countdown.done { color: #8fd3be; }
+
+.break-steps {
+  display: flex;
+  gap: 22px;
+  font-size: 0.72em;
+  text-align: left;
+}
+.break-steps > div {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  padding: 14px 20px;
+  min-width: 250px;
+}
+.break-steps b {
+  display: inline-block;
+  width: 1.6em; height: 1.6em; line-height: 1.6em;
+  text-align: center;
+  border-radius: 50%;
+  background: #8fd3be;
+  color: #142824;
+  margin-right: 8px;
+}
+.break-steps span { display: block; margin-top: 6px; opacity: 0.85; }
+.break-steps code { background: rgba(255, 255, 255, 0.15); color: #fff; padding: 1px 6px; border-radius: 4px; }
