@@ -1,0 +1,169 @@
+/* @theme cines */
+/*
+ * CINES theme for the workshop talk (Marp).
+ * Colours match docs/assets/stylesheets/extra.css (logo green #1f3d37).
+ * Fonts: Inter if installed, otherwise the system sans-serif (works offline).
+ */
+
+@import "default";
+
+:root {
+  --cines-green: #1f3d37;
+  --cines-green-light: #2f5a51;
+  --cines-green-dark: #142824;
+  --accent: #3d8b78;
+  --accent-soft: #e6f0ed;
+  --muted: #5d6b67;
+  --border: #e1e7e5;
+}
+
+section {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 28px;
+  color: var(--cines-green-dark);
+  background: #fff;
+  padding: 60px 72px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+
+section h1,
+section h2 {
+  color: var(--cines-green);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.6em;
+}
+
+section h1 { font-size: 1.9em; line-height: 1.15; }
+section h2 { font-size: 1.45em; line-height: 1.2; }
+
+section strong { color: var(--cines-green); }
+
+section .muted { color: var(--muted); }
+
+/* Small logo top right on content slides */
+section::before {
+  content: "";
+  position: absolute;
+  top: 34px;
+  right: 48px;
+  width: 92px;
+  height: 37px;
+  background: url("images/cines-mark.svg") no-repeat center / contain;
+}
+
+/* Section label above the title, e.g. "Opening" */
+section .kicker {
+  display: block;
+  font-size: 0.6em;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.4em;
+}
+
+/* Footer and page number */
+section footer,
+section::after {
+  font-size: 0.5em;
+  color: var(--muted);
+}
+
+/* --- Title slide: <!-- _class: title --> ---------------------------------- */
+section.title {
+  background: linear-gradient(135deg, #142824 0%, #1f3d37 55%, #2f5a51 100%);
+  color: #fff;
+  justify-content: center;
+}
+
+section.title::before {
+  top: auto;
+  bottom: 56px;
+  right: 72px;
+  width: 190px;
+  height: 102px;
+  background-image: url("images/cines-logo-white.svg");
+}
+
+section.title::after { display: none; }
+
+section.title h1 {
+  color: #fff;
+  font-size: 2.3em;
+  margin-bottom: 0.3em;
+}
+
+section.title h2 {
+  color: #8fd3be;
+  font-weight: 600;
+  font-size: 1.35em;
+  margin: 0 0 1.4em;
+}
+
+section.title p { color: rgba(255, 255, 255, 0.9); margin: 0.2em 0; }
+section.title .kicker { color: #8fd3be; }
+section.title footer { color: rgba(255, 255, 255, 0.7); }
+
+/* --- Cards in a row: <div class="cards"> ... </div> ----------------------- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  margin: 0.4em 0 0.9em;
+}
+
+.card {
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 26px 20px;
+  font-size: 0.78em;
+  line-height: 1.35;
+}
+
+.card svg { display: block; height: 64px; margin-bottom: 12px; }
+.card b { display: block; font-size: 1.15em; color: var(--cines-green); margin-bottom: 4px; }
+.card span { color: var(--muted); }
+
+/* Highlighted take-away line */
+.takeaway {
+  background: var(--accent-soft);
+  border-left: 6px solid var(--accent);
+  border-radius: 6px;
+  padding: 14px 22px;
+  font-size: 0.95em;
+}
+
+/* --- Agenda timeline: <div class="timeline"> ... </div> ------------------- */
+.timeline {
+  display: flex;
+  gap: 8px;
+  margin: 0.6em 0 1em;
+  height: 210px;
+}
+
+.slot {
+  border-radius: 12px;
+  padding: 18px 18px 14px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 0.7em;
+  line-height: 1.3;
+  min-width: 0;
+}
+
+.slot .time { font-size: 1.9em; font-weight: 700; line-height: 1; }
+.slot .what { font-weight: 700; font-size: 1.15em; }
+.slot .detail { opacity: 0.9; }
+
+.slot.talk     { flex: 30; background: var(--cines-green); }
+.slot.demo     { flex: 15; background: var(--cines-green-light); }
+.slot.break    { flex: 15; background: #c9d6d2; color: var(--cines-green-dark); }
+.slot.handson  { flex: 60; background: var(--accent); }
+
+.slot.now { outline: 4px solid #8fd3be; outline-offset: 3px; }
