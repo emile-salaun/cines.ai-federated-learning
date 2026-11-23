@@ -173,6 +173,34 @@
   margin: 0.6rem 0;
 }
 
+/* Whole-card link: add .ws-linkcards to a "grid cards" block. The card's
+   link stretches over the whole card (pure CSS, keyboard and new-tab safe).
+   Cards without a link (e.g. Break) stay static. */
+.md-typeset .grid.cards.ws-linkcards > ul > li {
+  position: relative;
+}
+
+.md-typeset .grid.cards.ws-linkcards > ul > li a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.md-typeset .grid.cards.ws-linkcards > ul > li:not(:has(a)):hover {
+  border-color: var(--ws-card-border);
+  box-shadow: none;
+}
+
+.md-typeset .grid.cards.ws-linkcards > ul > li:has(a:focus-visible) {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 2px;
+}
+
+.md-typeset .grid.cards.ws-linkcards > ul > li a:focus-visible {
+  outline: none;
+}
+
 /* --- Badges (duration, step) ------------------------------------------------- */
 .ws-meta {
   display: flex;

@@ -22,7 +22,7 @@ Train a model across several machines without moving the data.
 
 ## Agenda
 
-<div class="grid cards" markdown>
+<div class="grid cards ws-linkcards" markdown>
 
 -   :material-school-outline:{ .lg } **Concepts**
 
