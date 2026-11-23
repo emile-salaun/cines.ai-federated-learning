@@ -4,7 +4,7 @@ theme: cines
 paginate: true
 size: 16:9
 title: Federated Learning Workshop
-footer: CINES · Federated Learning Workshop
+footer: "[← Workshop site](../concepts/) · CINES · Federated Learning Workshop"
 ---
 
 <!-- _class: title -->
