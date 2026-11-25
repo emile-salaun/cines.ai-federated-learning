@@ -18,6 +18,7 @@ extra_css = ["assets/stylesheets/extra.css"]
 extra_javascript = [
   "assets/javascripts/groups.js",    # EDIT on the day: groups and SuperLink addresses
   "assets/javascripts/hands-on.js",
+  "assets/javascripts/widgets.js",   # hero animation (home), demo map
 ]
 
 nav = [
@@ -55,6 +56,7 @@ features = [
   "content.code.copy",
   "content.code.annotate",
   "content.tabs.link",
+  "content.tooltips",                # styled tooltips for the glossary (abbr)
 ]
 
 [[project.theme.palette]]
@@ -74,6 +76,7 @@ toggle.icon = "material/weather-sunny"
 toggle.name = "Light mode"
 
 [project.markdown_extensions]
+abbr = {}                            # glossary tooltips: includes/abbreviations.md
 admonition = {}
 attr_list = {}
 md_in_html = {}
@@ -85,8 +88,10 @@ pymdownx.superfences.custom_fences = [
 ]
 pymdownx.highlight.anchor_linenums = true
 pymdownx.inlinehilite = {}
+pymdownx.keys = {}                   # ++ctrl+c++ renders as keyboard keys
 pymdownx.snippets.base_path = ["includes"]   # shared snippets (hands-on stepper), outside docs/
 pymdownx.snippets.check_paths = true
+pymdownx.snippets.auto_append = ["abbreviations.md"]   # glossary, appended to every page
 pymdownx.tabbed.alternate_style = true
 pymdownx.tasklist.custom_checkbox = true
 pymdownx.emoji.emoji_index = "zensical.extensions.emoji.twemoji"

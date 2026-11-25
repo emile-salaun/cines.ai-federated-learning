@@ -19,6 +19,10 @@
   --ws-hero-bg: linear-gradient(135deg, #142824 0%, #1f3d37 55%, #2f5a51 100%);
   --ws-card-border: #e1e7e5;
   --ws-muted: #5d6b67;
+  --ws-map-land: #e9efed;
+  --ws-map-border: #b8c8c2;
+  --ws-map-site: var(--cines-green);
+  --ws-map-packet: #2e9e6a;
 }
 
 [data-md-color-scheme="slate"] {
@@ -31,6 +35,10 @@
   --ws-hero-bg: linear-gradient(135deg, #0f201d 0%, #17302b 55%, #234740 100%);
   --ws-card-border: #27332f;
   --ws-muted: #96a5a0;
+  --ws-map-land: #1b2724;
+  --ws-map-border: #35473f;
+  --ws-map-site: #7fcfb6;
+  --ws-map-packet: #6cc3a9;
 }
 
 /* --- Header: white with green logo (light), green with white logo (dark) ---- */
@@ -153,6 +161,211 @@
   background: var(--md-accent-fg-color);
   border-color: var(--md-accent-fg-color);
   color: #fff;
+}
+
+/* --- Home: hero animation (widgets.js, fl-round) ------------------------------ */
+.ws-hero {
+  position: relative;
+}
+
+.ws-hero__anim {
+  position: absolute;
+  top: 50%;
+  right: 2.5rem;
+  width: min(36%, 21rem);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.ws-round {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.ws-round__links line {
+  stroke: rgba(255, 255, 255, 0.22);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 5;
+}
+
+.ws-round__node {
+  fill: rgba(255, 255, 255, 0.08);
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 2;
+}
+
+.ws-round__halo {
+  fill: none;
+  stroke: #6cc3a9;
+  stroke-width: 2;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.ws-round__rack {
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.ws-round__bar--0 { fill: #ffffff; }
+.ws-round__bar--1 { fill: #6cc3a9; }
+.ws-round__bar--2 { fill: #f0b04a; }
+
+.ws-round__packets .is-model { fill: #ffffff; }
+.ws-round__packets .is-update { fill: #6cc3a9; }
+
+.ws-round__round,
+.ws-round__caption {
+  fill: rgba(255, 255, 255, 0.85);
+  text-anchor: middle;
+  font-size: 13px;
+}
+
+.ws-round__round {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  fill: rgba(255, 255, 255, 0.6);
+}
+
+/* Training: client halos pulse. Aggregation: server halo pulses. */
+.ws-round[data-phase="1"] .ws-round__client .ws-round__halo,
+.ws-round[data-phase="3"] .ws-round__server .ws-round__halo {
+  animation: ws-pulse 1.4s ease-out infinite;
+}
+
+.ws-round[data-phase="1"] .ws-round__bar {
+  animation: ws-bars 0.7s ease-in-out infinite alternate;
+  transform-box: fill-box;
+  transform-origin: bottom;
+}
+
+@keyframes ws-pulse {
+  0%   { opacity: 0.9; transform: scale(1); }
+  100% { opacity: 0;   transform: scale(1.35); }
+}
+
+@keyframes ws-bars {
+  from { transform: scaleY(1); }
+  to   { transform: scaleY(0.6); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ws-round *,
+  .ws-map__svg * {
+    animation: none !important;
+  }
+}
+
+/* Room for the animation: the hero text stays on the left. */
+@media screen and (min-width: 60em) {
+  .ws-hero {
+    padding-right: calc(min(36%, 21rem) + 4rem);
+  }
+}
+
+@media screen and (max-width: 59.9375em) {
+  .ws-hero__anim {
+    display: none;
+  }
+}
+
+/* --- Demo: map (widgets.js, demo-map) ------------------------------------------ */
+.md-typeset .ws-map {
+  max-width: 30rem;
+  margin: 1.5rem auto 2rem;
+}
+
+.ws-map__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.ws-map__land {
+  fill: var(--ws-map-land);
+  stroke: var(--ws-map-border);
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+}
+
+.ws-map__route {
+  fill: none;
+  stroke: var(--ws-map-packet);
+  stroke-width: 2;
+  stroke-dasharray: 5 6;
+  opacity: 0.7;
+}
+
+.ws-map__packet {
+  fill: var(--ws-map-packet);
+  stroke: var(--md-default-bg-color);
+  stroke-width: 2;
+}
+
+.ws-map__dot {
+  fill: var(--ws-map-site);
+  stroke: var(--md-default-bg-color);
+  stroke-width: 2.5;
+}
+
+.ws-map__pulse {
+  fill: var(--ws-map-site);
+  opacity: 0.25;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ws-pulse 2.2s ease-out infinite;
+}
+
+.ws-map__name {
+  fill: var(--md-default-fg-color);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.ws-map__centre,
+.ws-map__tbc {
+  fill: var(--ws-muted);
+  font-size: 12px;
+}
+
+.ws-map__tbc {
+  font-style: italic;
+}
+
+/* Site not confirmed yet: hollow dashed marker, no pulse */
+.ws-map__site.is-tbc .ws-map__dot {
+  fill: var(--md-default-bg-color);
+  stroke: var(--ws-map-site);
+  stroke-dasharray: 3 2.5;
+}
+
+.ws-map__site.is-tbc .ws-map__pulse {
+  display: none;
+}
+
+.md-typeset .ws-map figcaption {
+  max-width: none;
+  margin-top: 0.6rem;
+  font-size: 0.7rem;
+  color: var(--ws-muted);
+}
+
+/* --- Glossary tooltips (abbr, includes/abbreviations.md) ----------------------- */
+.md-typeset abbr {
+  text-decoration: underline dotted;
+  text-underline-offset: 0.2em;
+  cursor: help;
+}
+
+.ws-hero abbr {
+  text-decoration-color: rgba(255, 255, 255, 0.5);
 }
 
 /* --- Cards ------------------------------------------------------------------- */
