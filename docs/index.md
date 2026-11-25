@@ -6,6 +6,8 @@ hide:
 
 <div class="ws-hero" markdown>
 
+<div class="ws-hero__anim" data-ws-widget="fl-round"></div>
+
 ![CINES](assets/images/cines-logo-white.svg){ .ws-hero__logo }
 
 <div class="ws-eyebrow">Workshop</div>
