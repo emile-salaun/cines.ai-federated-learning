@@ -1,45 +1,85 @@
 # Federated Learning Workshop (CINES)
 
-Material for a 2-hour federated learning workshop: 30 min talk, 15 min NVIDIA FLARE demo
-on Adastra, 15 min break, 60 min hands-on with Flower in groups of 4–5.
+Train a model across several machines without moving the data. This repository holds
+the hands-on material of the workshop: a Flower app, the notebooks and a live dashboard.
 
-Site: https://emile-salaun.github.io/cines.ai-federated-learning/
+**Workshop site (start here):** https://emile-salaun.github.io/cines.ai-federated-learning/
 
-## Layout
+## During the workshop
 
-| Folder | Content |
-|---|---|
-| `app/` | Flower app (uv project: `pyproject.toml`, `uv.lock`, `flworkshop/`) |
-| `notebooks/` | Hands-on notebooks: `simulation.ipynb` (fallback); lead and member notebooks to come |
-| `dashboard/` | Web dashboard opened next to the notebook (HTML/CSS/JS, no dependencies) |
-| `scripts/` | Data preparation, partition viewer, calibration, reference computation (incl. SLURM job) |
-| `references/` | Precomputed results: `calibration/` now, solo/centralised baselines later |
-| `demo-nvflare/` | NVIDIA FLARE demo on Adastra (to come) |
-| `infra/` | JupyterHub (TLJH) setup for the hands-on (to come) |
-| `slides/` | Talk slides (to come) |
-| `docs/`, `includes/`, `zensical.toml` | Workshop website (Zensical), deployed to GitHub Pages |
+You do not need to install anything. Follow the **Hands-on** section of the site: your
+trainers give you the hub address and your group number on the day.
 
-## Quick start (simulation, Linux / macOS)
+## Run the hands-on on your own computer
+
+This runs the simulation version (5 virtual clients in one notebook). It needs about
+4.5 GB of RAM, 2 CPU cores and internet access for steps 1 to 3.
+
+**1. Install uv** (Python package manager)
+
+Linux / macOS:
 
 ```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Windows PowerShell:
+
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+You should see: `uv --version` prints a version number (open a new terminal first).
+
+**2. Get the code and install it**
+
+Linux / macOS and Windows PowerShell:
+
+```bash
+git clone https://github.com/emile-salaun/cines.ai-federated-learning.git
+cd cines.ai-federated-learning
 uv sync --project app --group notebook
-uv run --project app python scripts/prepare_data.py --dataset fashion_mnist   # needs internet, once
+```
+
+You should see: uv installs Python 3.12 if needed, then the packages, and ends without
+an error.
+
+**3. Download the data (once)**
+
+Linux / macOS and Windows PowerShell:
+
+```bash
+uv run --project app python scripts/prepare_data.py --dataset fashion_mnist
+```
+
+You should see: a line starting with `[fashion_mnist] saved`. From now on, everything
+runs offline.
+
+**4. Open the notebook**
+
+Linux / macOS and Windows PowerShell:
+
+```bash
 uv run --project app jupyter lab notebooks/simulation.ipynb
 ```
 
-Windows PowerShell: same commands. Details and the command-line launch are in
-[`app/README.md`](app/README.md).
+You should see: JupyterLab opens in your browser on `simulation.ipynb`. Run the first
+cell: it prints `Simulated federation: 5 clients` and a link to open the dashboard.
 
-## Website
+Then follow the notebook, one cell at a time.
 
-```bash
-pip install -r requirements-docs.txt
-zensical serve                       # http://127.0.0.1:8000
-zensical build --clean --strict      # what CI runs
-```
+## What is in this repository
 
-Pushes to `main` that touch the site are built and deployed by
-`.github/workflows/docs.yml`.
+| Folder | Content |
+|---|---|
+| `app/` | The Flower app (model, clients, server) |
+| `notebooks/` | Hands-on notebooks |
+| `dashboard/` | The dashboard that shows each run live |
+| `scripts/` | Data preparation and helper scripts |
+| `references/` | Precomputed results used for comparison |
+| `slides/` | Slides of the talk |
+
+Trainers and contributors: see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 

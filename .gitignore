@@ -21,3 +21,5 @@ site/
 *.pem
 *.crt
 startup/
+
+.git-rewrite

@@ -1,3 +1,3 @@
 # slides
 
-Slides of the 30-minute talk. Status: OPEN.
+Slides of the 30-minute talk (Marp). Built and published with the site; see CONTRIBUTING.md.
