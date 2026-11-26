@@ -1,0 +1,38 @@
+# =============================================================================
+# pyproject.toml - uv workspace at the repository root.
+#
+# One environment (.venv/) and one lock file (uv.lock) here, for the Flower app
+# (app/, a workspace member) and the notebooks:
+#   uv sync --group notebook
+#   uv run jupyter lab notebooks/simulation.ipynb
+# The app's own settings (dependencies, run config, CPU PyTorch index) stay in
+# app/pyproject.toml: `flwr run app` reads that file.
+# =============================================================================
+[project]
+name = "fl-workshop-root"
+version = "0.1.0"
+description = "Federated learning workshop: uv workspace (app + notebooks)"
+requires-python = ">=3.12,<3.13"
+dependencies = ["fl-workshop"]
+
+[dependency-groups]
+# Hands-on notebooks: uv sync --group notebook
+notebook = [
+    "jupyterlab==4.6.6",
+    "ipykernel==7.4.0",
+    "matplotlib==3.11.2",
+]
+
+[tool.uv]
+package = false                      # the root is not a package, only the workspace
+environments = [
+    "sys_platform == 'linux'",
+    "sys_platform == 'darwin' and platform_machine == 'arm64'",
+    "sys_platform == 'win32' and platform_machine == 'AMD64'",
+]
+
+[tool.uv.sources]
+fl-workshop = { workspace = true }
+
+[tool.uv.workspace]
+members = ["app"]

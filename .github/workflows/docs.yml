@@ -52,8 +52,21 @@ jobs:
       - name: Install Zensical
         run: pip install -r requirements-docs.txt
 
-      - name: Build site
+      - name: Build site (scenario from zensical.toml, B by default)
         run: zensical build --clean --strict
+
+      # Second copy with the other hands-on scenario, published at /scenario-a/
+      # and linked from nowhere: trainers switch by sharing that URL, with no
+      # rebuild. Building it here also checks the A-only blocks with --strict.
+      - name: Build site (scenario A, at /scenario-a/)
+        run: |
+          sed -e 's/^scenario = "[AB]"/scenario = "A"/' \
+              -e 's|^site_url = "\(.*\)/"|site_url = "\1/scenario-a/"|' \
+              -e '/^\[project\]$/a site_dir = "site-scenario-a"' \
+              zensical.toml > zensical.scenario-a.toml
+          grep -q '^scenario = "A"' zensical.scenario-a.toml    # fail if the switch was renamed
+          zensical build --clean --strict -f zensical.scenario-a.toml
+          mv site-scenario-a site/scenario-a
 
       - uses: actions/setup-node@v5
         with:
@@ -66,6 +79,7 @@ jobs:
           cp -r slides/images slides/widgets.js site/slides/
           $MARP --html --theme-set slides/themes -o site/slides/index.html -- slides/talk.md
           $MARP --html --allow-local-files --theme-set slides/themes --pdf -o site/slides/talk.pdf -- slides/talk.md
+          cp -r site/slides site/scenario-a/slides     # Concepts links to ../slides/
 
       - name: Upload site
         if: github.event_name != 'pull_request'

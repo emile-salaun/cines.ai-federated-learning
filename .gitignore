@@ -13,6 +13,8 @@ final_model.pt
 
 # Site build
 site/
+site-scenario-a/
+zensical.scenario-a.toml
 .cache/
 
 # Secrets and NVFLARE startup kits

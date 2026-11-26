@@ -11,8 +11,8 @@
 # "Solo" / "centralised" references of the hands-on (CPU only).
 # 6 trainings per configuration (5 solo clients + 1 centralised), 2 threads each.
 # Prerequisites, from a login node (compute nodes have no internet access):
-#   uv sync --project app
-#   uv run --project app python scripts/prepare_data.py
+#   uv sync
+#   uv run python scripts/prepare_data.py
 # Submit from the repository root: sbatch scripts/compute_baselines.slurm
 # Replace <project> with your Adastra project before submitting (do not commit it).
 
@@ -23,4 +23,4 @@ export OMP_NUM_THREADS=2
 export HF_HUB_OFFLINE=1 HF_DATASETS_OFFLINE=1
 
 # Use the project's Python directly: `uv run` could try a network sync.
-srun --cpu-bind=cores app/.venv/bin/python scripts/compute_baselines.py --dataset all --workers 6 --threads 2
+srun --cpu-bind=cores .venv/bin/python scripts/compute_baselines.py --dataset all --workers 6 --threads 2

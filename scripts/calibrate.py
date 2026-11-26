@@ -3,13 +3,13 @@
 Run from the repository root, on a machine that has the data (see prepare_data.py),
 ideally with the same number of CPUs as planned per participant:
 
-    uv run --project app python scripts/calibrate.py --phase hparams                 # 1. lr x local epochs, IID
-    uv run --project app python scripts/calibrate.py --phase noniid                  # 2. IID / non-IID gap
-    uv run --project app python scripts/calibrate.py --phase fedprox                 # 3. effect of FedProx
-    uv run --project app python scripts/calibrate.py --phase participation           # 4. partial participation
-    uv run --project app python scripts/calibrate.py --phase commcomp                # 5. rounds x local epochs, same budget
-    uv run --project app python scripts/calibrate.py --phase hparams --dataset fashion_mnist --rounds 5   # quick
-    uv run --project app python scripts/calibrate.py --phase fedprox --local-epochs 5 --lr 0.01 --tag ep5  # variant
+    uv run python scripts/calibrate.py --phase hparams                 # 1. lr x local epochs, IID
+    uv run python scripts/calibrate.py --phase noniid                  # 2. IID / non-IID gap
+    uv run python scripts/calibrate.py --phase fedprox                 # 3. effect of FedProx
+    uv run python scripts/calibrate.py --phase participation           # 4. partial participation
+    uv run python scripts/calibrate.py --phase commcomp                # 5. rounds x local epochs, same budget
+    uv run python scripts/calibrate.py --phase hparams --dataset fashion_mnist --rounds 5   # quick
+    uv run python scripts/calibrate.py --phase fedprox --local-epochs 5 --lr 0.01 --tag ep5  # variant
 
 Each simulation writes a JSON to results/calibration/<phase>/. Finished runs are skipped:
 you can interrupt and restart. At the end of each phase, the script prints a table,
@@ -127,7 +127,7 @@ def flwr_executable() -> str:
     bindir = Path(sys.executable).parent
     found = shutil.which("flwr", path=str(bindir)) or shutil.which("flwr")
     if not found:
-        sys.exit("`flwr` command not found: run this script with `uv run --project app python scripts/calibrate.py`.")
+        sys.exit("`flwr` command not found: run this script with `uv run python scripts/calibrate.py`.")
     return found
 
 

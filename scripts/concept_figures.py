@@ -2,7 +2,7 @@
 
 Run from the repository root:
 
-    uv run --project app python scripts/concept_figures.py
+    uv run python scripts/concept_figures.py
 
 Writes includes/figures/*.svg. docs/concepts.md inlines them with pymdownx.snippets
 (`--8<-- "figures/<name>.svg"`), so they follow the site's light/dark toggle: colours

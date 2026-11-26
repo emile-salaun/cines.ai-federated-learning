@@ -12,23 +12,27 @@ All commands below run from the **repository root**.
 | Component | Version |
 |---|---|
 | Python | 3.12 (`app/.python-version`) |
-| flwr[simulation] | 1.39.x (exact version via `app/uv.lock`) |
+| flwr[simulation] | 1.39.x (exact version via `uv.lock`) |
 | ray | 2.55.1 (pinned by Flower) |
 | flwr-datasets[vision] | 0.6.1 |
 | torch / torchvision | 2.14.1 / 0.29.1, CPU |
 
 ## Install
 
+From the repository root: the app is a member of the uv workspace defined in
+`../pyproject.toml`, so the environment (`.venv/`) and the lock file (`uv.lock`) are at
+the root, and every command below runs from there.
+
 ```bash
-uv sync --project app                    # app only
-uv sync --project app --group notebook   # + JupyterLab and matplotlib
+uv sync                    # app only
+uv sync --group notebook   # + JupyterLab and matplotlib
 ```
 
 ## Prepare the data (once, with access to Hugging Face)
 
 ```bash
-uv run --project app python scripts/prepare_data.py                           # CIFAR-10 + Fashion-MNIST
-uv run --project app python scripts/prepare_data.py --data-dir /path/to/shared # elsewhere than ~/.cache/fl-workshop
+uv run python scripts/prepare_data.py                           # CIFAR-10 + Fashion-MNIST
+uv run python scripts/prepare_data.py --data-dir /path/to/shared # elsewhere than ~/.cache/fl-workshop
 ```
 
 Each dataset becomes one file `<data-dir>/<name>.pt` (uint8 tensors): about 185 MB for
@@ -46,21 +50,21 @@ export FLWR_DISABLE_RUNTIME_DEPENDENCY_INSTALLATION=1
 
 # 2. Number of simulated clients and Ray CPU cap (once)
 #    Without a cap, Ray takes every core of the machine.
-uv run --project app flwr federation simulation-config @none/default local \
+uv run flwr federation simulation-config @none/default local \
   --num-supernodes 5 --client-resources-num-cpus 1 --init-args-num-cpus 5
 
 # 3. Run
-uv run --project app flwr run app --stream
-uv run --project app flwr run app --stream --run-config "partitioning='dirichlet' dirichlet-alpha=0.1"
+uv run flwr run app --stream
+uv run flwr run app --stream --run-config "partitioning='dirichlet' dirichlet-alpha=0.1"
 ```
 
 Windows PowerShell:
 
 ```powershell
 $env:FLWR_DISABLE_RUNTIME_DEPENDENCY_INSTALLATION = "1"
-uv run --project app flwr federation simulation-config "@none/default" local `
+uv run flwr federation simulation-config "@none/default" local `
   --num-supernodes 5 --client-resources-num-cpus 1 --init-args-num-cpus 5
-uv run --project app flwr run app --stream --run-config "partitioning='dirichlet' dirichlet-alpha=0.1"
+uv run flwr run app --stream --run-config "partitioning='dirichlet' dirichlet-alpha=0.1"
 ```
 
 String values in `--run-config` take single quotes. Exercises change only the run
@@ -93,9 +97,9 @@ with the lead and member notebooks (not written yet).
 ## See what each client receives
 
 ```bash
-uv run --project app python scripts/show_partitions.py
-uv run --project app python scripts/show_partitions.py --partitioning dirichlet --alpha 0.1
-uv run --project app python scripts/show_partitions.py --partitioning pathological --classes-per-partition 2
+uv run python scripts/show_partitions.py
+uv run python scripts/show_partitions.py --partitioning dirichlet --alpha 0.1
+uv run python scripts/show_partitions.py --partitioning pathological --classes-per-partition 2
 ```
 
 The script uses the same code as the app: the table is exactly the class split between
@@ -109,12 +113,12 @@ the simulated clients.
 and restart. The committed results are in `references/calibration/`.
 
 ```bash
-uv run --project app python scripts/calibrate.py --phase hparams        # lr x local epochs, IID, 10 rounds
-uv run --project app python scripts/calibrate.py --phase noniid         # IID, Dirichlet 1.0 / 0.3 / 0.1, pathological
-uv run --project app python scripts/calibrate.py --phase fedprox        # Dirichlet 0.1 with mu = 0, 0.01, 0.1, 1
-uv run --project app python scripts/calibrate.py --phase participation  # fraction-train and dropout-rate, Dirichlet 0.1
-uv run --project app python scripts/calibrate.py --phase commcomp       # rounds x local epochs at equal budget, IID and Dirichlet 0.1
-uv run --project app python scripts/calibrate.py --phase noniid --report-only   # print again without running
+uv run python scripts/calibrate.py --phase hparams        # lr x local epochs, IID, 10 rounds
+uv run python scripts/calibrate.py --phase noniid         # IID, Dirichlet 1.0 / 0.3 / 0.1, pathological
+uv run python scripts/calibrate.py --phase fedprox        # Dirichlet 0.1 with mu = 0, 0.01, 0.1, 1
+uv run python scripts/calibrate.py --phase participation  # fraction-train and dropout-rate, Dirichlet 0.1
+uv run python scripts/calibrate.py --phase commcomp       # rounds x local epochs at equal budget, IID and Dirichlet 0.1
+uv run python scripts/calibrate.py --phase noniid --report-only   # print again without running
 ```
 
 The `noniid` and `fedprox` phases reuse the best (lr, epochs) pair of the `hparams` phase
@@ -127,7 +131,7 @@ and the last one), `sec_per_round` (median, first round excluded), `warmup_s` (f
 round, which includes Ray start-up and data loading), `total_s` (total run time).
 
 On a shared compute node, run the calibration inside an allocation rather than on a
-login node, for example `srun -c 8 --time 02:00:00 uv run --project app python scripts/calibrate.py ...`.
+login node, for example `srun -c 8 --time 02:00:00 uv run python scripts/calibrate.py ...`.
 
 ## Pitfalls (Flower 1.39)
 
@@ -162,10 +166,11 @@ app/
 │   ├── dashboard_server.py  # Local HTTP server of the dashboard (files + JSON API)
 │   ├── paths.py             # Where dashboard/, references/ and results/ live
 │   └── viz.py               # Notebook setup (federation, data check) and dashboard link
-├── pyproject.toml           # Dependencies, app configuration, CPU PyTorch index
-├── uv.lock
-└── .python-version
+└── pyproject.toml           # Dependencies, app configuration, CPU PyTorch index
 ```
+
+The uv workspace (`pyproject.toml` with the notebook dependency group and the supported
+platforms, `uv.lock`, `.python-version`, `.venv/`) is at the repository root.
 
 `paths.py` locates the repository root as the parent of `app/`; set `FL_WORKSHOP_ROOT`
 to use another root.
@@ -184,8 +189,8 @@ They are **precomputed once** and shipped in `references/`: participants do not
 recompute them. It takes a few CPU minutes per configuration:
 
 ```bash
-uv run --project app python scripts/compute_baselines.py                 # Fashion-MNIST: pathological, Dirichlet 0.1, IID
-uv run --project app python scripts/compute_baselines.py --dataset all   # + CIFAR-10
+uv run python scripts/compute_baselines.py                 # Fashion-MNIST: pathological, Dirichlet 0.1, IID
+uv run python scripts/compute_baselines.py --dataset all   # + CIFAR-10
 sbatch scripts/compute_baselines.slurm                                   # on Adastra (replace <project>)
 ```
 
@@ -196,8 +201,8 @@ change of the defaults in `pyproject.toml`, recompute it (`--force`).
 ## Notebook and dashboard
 
 ```bash
-uv sync --project app --group notebook
-uv run --project app jupyter lab notebooks/simulation.ipynb
+uv sync --group notebook
+uv run jupyter lab notebooks/simulation.ipynb
 ```
 
 The notebook launches every run with Flower's own command,

@@ -49,7 +49,7 @@ def load_arrays(data_dir: str, dataset: str) -> dict:
     if not path.exists():
         raise FileNotFoundError(
             f"{path} not found. Run first: "
-            f"uv run --project app python scripts/prepare_data.py --dataset {dataset}"
+            f"uv run python scripts/prepare_data.py --dataset {dataset}"
         )
     return torch.load(path, mmap=True, weights_only=True)
 

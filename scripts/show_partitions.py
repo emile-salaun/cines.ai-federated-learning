@@ -1,8 +1,8 @@
 """Print the class distribution per client for a given partitioning.
 
-    uv run --project app python scripts/show_partitions.py                               # IID, 5 clients
-    uv run --project app python scripts/show_partitions.py --partitioning dirichlet --alpha 0.1
-    uv run --project app python scripts/show_partitions.py --partitioning pathological --classes-per-partition 2
+    uv run python scripts/show_partitions.py                               # IID, 5 clients
+    uv run python scripts/show_partitions.py --partitioning dirichlet --alpha 0.1
+    uv run python scripts/show_partitions.py --partitioning pathological --classes-per-partition 2
 
 Uses exactly the same code as the Flower app: what is printed here is what each
 simulated client receives.

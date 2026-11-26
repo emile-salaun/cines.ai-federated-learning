@@ -2,9 +2,9 @@
 
 Run from the repository root, on a machine with access to Hugging Face:
 
-    uv run --project app python scripts/prepare_data.py                      # CIFAR-10 and Fashion-MNIST
-    uv run --project app python scripts/prepare_data.py --dataset cifar10
-    uv run --project app python scripts/prepare_data.py --data-dir /srv/fl-workshop/data
+    uv run python scripts/prepare_data.py                      # CIFAR-10 and Fashion-MNIST
+    uv run python scripts/prepare_data.py --dataset cifar10
+    uv run python scripts/prepare_data.py --data-dir /srv/fl-workshop/data
 
 Each dataset is saved to a single file `<data-dir>/<name>.pt` holding uint8 tensors
 (N×C×H×W images and labels). The Flower app then reads these files without ever

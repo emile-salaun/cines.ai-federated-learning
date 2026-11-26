@@ -4,9 +4,9 @@ Run once, on a machine that has the data (see prepare_data.py); results go to
 references/ and ship with the project. Participants do not recompute them: the dashboard
 overlays them on their federated runs.
 
-    uv run --project app python scripts/compute_baselines.py                    # default set (Fashion-MNIST)
-    uv run --project app python scripts/compute_baselines.py --dataset all      # + CIFAR-10
-    uv run --project app python scripts/compute_baselines.py --workers 6 --threads 2
+    uv run python scripts/compute_baselines.py                    # default set (Fashion-MNIST)
+    uv run python scripts/compute_baselines.py --dataset all      # + CIFAR-10
+    uv run python scripts/compute_baselines.py --workers 6 --threads 2
 
 On Adastra: sbatch scripts/compute_baselines.slurm (from the repository root)
 """

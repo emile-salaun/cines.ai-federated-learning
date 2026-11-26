@@ -15,14 +15,6 @@ dependencies = [
     "torchvision==0.29.1",
 ]
 
-[dependency-groups]
-# Hands-on notebooks: uv sync --project app --group notebook
-notebook = [
-    "jupyterlab==4.6.6",
-    "ipykernel==7.4.0",
-    "matplotlib==3.11.2",
-]
-
 [tool.hatch.build.targets.wheel]
 packages = ["flworkshop"]
 
@@ -69,9 +61,5 @@ name = "pytorch-cpu"
 url = "https://download.pytorch.org/whl/cpu"
 explicit = true
 
-[tool.uv]
-environments = [
-    "sys_platform == 'linux'",
-    "sys_platform == 'darwin' and platform_machine == 'arm64'",
-    "sys_platform == 'win32' and platform_machine == 'AMD64'",
-]
+# Supported platforms, the notebook dependency group, the lock file and the .venv
+# live in the uv workspace at the repository root (../pyproject.toml).

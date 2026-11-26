@@ -60,6 +60,12 @@ the group and seat picker and the architecture section). Pages test it with
 `{% if scenario == "A" %}`, so write `{{`, `{%` and `{#` in Markdown only as template
 syntax.
 
+The deploy publishes both scenarios: the `zensical.toml` value (B) at the site root, and
+an A build at `/scenario-a/`, linked from nowhere. To run the hands-on in A, share
+`https://emile-salaun.github.io/cines.ai-federated-learning/scenario-a/`; no rebuild is
+needed. Both builds run with `--strict`, so A-only blocks are checked on every push.
+Local preview of A: change `scenario` to `"A"` and run `zensical serve`.
+
 ## Slides
 
 The CI renders `slides/talk.md` with Marp CLI 4.5.1 into `site/slides/index.html` and

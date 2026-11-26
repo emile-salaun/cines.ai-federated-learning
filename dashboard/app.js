@@ -240,7 +240,7 @@ function renderTogether(D) {
     detail = `At round ${r} of ${D.total}, ${describeConfig(D.run.config)}. If all images were gathered in one place, the centralised model would reach ${pct(cen.accuracy)} (${recognized(cen.per_class)} classes): that is the upper bound.`;
   } else {
     hero = `<p>Together, the federated model recognises <span class="n">${flC} classes out of ${D.classes.length}</span> and reaches <span class="n">${pct(fl)}</span>, without a single image leaving the clients.</p>`;
-    detail = `No "solo / centralised" reference for this configuration (${describeConfig(D.run.config)}). They exist for the notebook configurations; to add more: <code>uv run --project app python scripts/compute_baselines.py</code>.`;
+    detail = `No "solo / centralised" reference for this configuration (${describeConfig(D.run.config)}). They exist for the notebook configurations; to add more: <code>uv run python scripts/compute_baselines.py</code>.`;
   }
 
   v.innerHTML = `

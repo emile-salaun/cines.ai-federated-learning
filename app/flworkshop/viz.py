@@ -101,7 +101,7 @@ def setup(num_clients: int = 5, cpus: int = 2, dashboard_port: int = 8050) -> No
     print(f"Simulated federation: {num_clients} clients, {cpus} CPUs in total")
     for name in ("fashion_mnist", "cifar10"):
         path = DEFAULT_DATA_DIR / f"{name}.pt"
-        state = "OK" if path.exists() else "missing (uv run --project app python scripts/prepare_data.py)"
+        state = "OK" if path.exists() else "missing (uv run python scripts/prepare_data.py)"
         print(f"Data {name:<14}: {state}")
     _STATE["port"] = dashboard_server.start(dashboard_port)
     dashboard()

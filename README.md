@@ -38,7 +38,7 @@ Linux / macOS and Windows PowerShell:
 ```bash
 git clone https://github.com/emile-salaun/cines.ai-federated-learning.git
 cd cines.ai-federated-learning
-uv sync --project app --group notebook
+uv sync --group notebook
 ```
 
 You should see: uv installs Python 3.12 if needed, then the packages, and ends without
@@ -49,7 +49,7 @@ an error.
 Linux / macOS and Windows PowerShell:
 
 ```bash
-uv run --project app python scripts/prepare_data.py --dataset fashion_mnist
+uv run python scripts/prepare_data.py --dataset fashion_mnist
 ```
 
 You should see: a line starting with `[fashion_mnist] saved`. From now on, everything
@@ -60,7 +60,7 @@ runs offline.
 Linux / macOS and Windows PowerShell:
 
 ```bash
-uv run --project app jupyter lab notebooks/simulation.ipynb
+uv run jupyter lab notebooks/simulation.ipynb
 ```
 
 You should see: JupyterLab opens in your browser on `simulation.ipynb`. Run the first

@@ -44,15 +44,15 @@ hide:
     === "Linux / macOS"
 
         ```bash
-        uv sync --project app --group notebook
-        uv run --project app jupyter lab notebooks/simulation.ipynb
+        uv sync --group notebook
+        uv run jupyter lab notebooks/simulation.ipynb
         ```
 
     === "Windows PowerShell"
 
         ```powershell
-        uv sync --project app --group notebook
-        uv run --project app jupyter lab notebooks/simulation.ipynb
+        uv sync --group notebook
+        uv run jupyter lab notebooks/simulation.ipynb
         ```
 
 === "Google Colab"
@@ -82,7 +82,7 @@ terminal opened at the repository root.
     ```text
     Simulated federation: 5 clients, 2 CPUs in total
     Data fashion_mnist : OK
-    Data cifar10       : missing (uv run --project app python scripts/prepare_data.py)
+    Data cifar10       : missing (uv run python scripts/prepare_data.py)
     ```
 
     followed by an **Open the dashboard** link. `cifar10` may be missing: it is not
@@ -104,7 +104,9 @@ results folder and follows the latest run, round by round.
 
 - [ ] The setup cell printed the federation and `fashion_mnist : OK`
 - [ ] The dashboard is open in a tab
+{% if scenario == "A" %}
 - [ ] I know my client number
+{% endif %}
 
 </div>
 
