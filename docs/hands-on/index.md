@@ -8,22 +8,17 @@ hide:
 
 <div class="ws-meta" markdown="span">
   <span class="ws-badge">:material-clock-outline: 60 min</span>
-  <span class="ws-badge">:material-account-group-outline: Groups of 4–5</span>
+  <span class="ws-badge">:material-account-group-outline: Groups of 3–6</span>
   <span class="ws-badge">:material-flower-outline: Flower</span>
 </div>
 
 --8<-- "hands-on-stepper.md"
 
-You build a small federation, then put it under stress: unequal data, slow clients,
-costly communication, failures. Six short steps; each one asks a question, you predict
-the answer, launch one run and check it in the dashboard.
-
-!!! info "Two ways to run, one path"
-
-    **Deployed** (main): one SuperLink per group, each member runs one SuperNode, the
-    group lead launches the runs. **Simulation** (fallback, if the trainers ask your group
-    to switch): each member simulates the five clients in one notebook.
-    Only [step 0](00-setup.md) differs; steps 1 to 5 are the same for both.
+You learn federated learning in two phases. **Phase 1**: everyone simulates a small
+federation in their own notebook and puts it under stress (unequal data, slow clients,
+costly communication). **Phase 2**: the whole room joins one real federation, and the
+server measures what each participant brings. In each step you predict, run, check
+in the dashboard and discuss with your group.
 
 ## Your group { #your-group }
 
@@ -36,21 +31,19 @@ Pick your group and seat. The commands on the next pages will use your values.
 
 ## Architecture
 
-<!-- TODO: final topology (hosts, ports) -->
+<!-- TODO: final topology (hosts, ports, seat numbering across the room) after the prototype -->
 
 ```mermaid
 flowchart LR
-    subgraph ORG["Organisers · TBD"]
-        SL["SuperLink<br/>group N"]
+    subgraph P1["Phase 1 · your notebook"]
+        R1["flwr run"] --> L1["Local SuperLink<br/>5 simulated clients"]
     end
-    subgraph GRP["Your group"]
-        N1["SuperNode<br/>seat 1"]
-        N2["SuperNode<br/>seat 2"]
-        N3["SuperNode<br/>seat …"]
+    subgraph P2["Phase 2 · the room"]
+        SL["Room SuperLink<br/>(trainers)"]
+        N1["SuperNode<br/>seat 1"] --> SL
+        N2["SuperNode<br/>seat 2"] --> SL
+        N3["SuperNode<br/>seat …"] --> SL
     end
-    N1 --> SL
-    N2 --> SL
-    N3 --> SL
 ```
 
 ## Steps
@@ -61,10 +54,10 @@ flowchart LR
 
     ---
 
-    Build the federation: deployed with your group, or simulated in one notebook.
+    Open the notebook, start the simulated federation and the dashboard.
 
-    <span class="ws-badge">:material-clock-outline: 10 min</span>
-    <span class="ws-badge">:material-account-group-outline: Group</span>
+    <span class="ws-badge">:material-clock-outline: 5 min</span>
+    <span class="ws-badge">:material-account-outline: Solo</span>
 
     [:octicons-arrow-right-24: Start](00-setup.md)
 
@@ -74,7 +67,7 @@ flowchart LR
 
     Each client holds two classes. Alone or together, what can a model recognise? What travels on the network?
 
-    <span class="ws-badge">:material-clock-outline: 12 min</span>
+    <span class="ws-badge">:material-clock-outline: 10 min</span>
     <span class="ws-badge">:material-account-group-outline: Group</span>
 
     [:octicons-arrow-right-24: Start](01-first-run.md)
@@ -85,7 +78,7 @@ flowchart LR
 
     Unequal data, unequal clients: what happens to accuracy and to the round time?
 
-    <span class="ws-badge">:material-clock-outline: 12 min</span>
+    <span class="ws-badge">:material-clock-outline: 10 min</span>
     <span class="ws-badge">:material-account-group-outline: Group</span>
 
     [:octicons-arrow-right-24: Start](02-heterogeneity.md)
@@ -94,31 +87,31 @@ flowchart LR
 
     ---
 
-    Same compute budget, fewer or more rounds: when does talking less pay off?
+    Same compute budget, fewer or more rounds: when does talking less pay off? The group splits the runs.
 
-    <span class="ws-badge">:material-clock-outline: 12 min</span>
+    <span class="ws-badge">:material-clock-outline: 10 min</span>
     <span class="ws-badge">:material-account-group-outline: Group</span>
 
     [:octicons-arrow-right-24: Start](03-compute-vs-communication.md)
 
--   :material-numeric-4-circle-outline:{ .lg } **Failures**
+-   :material-numeric-4-circle-outline:{ .lg } **Room federation**
 
     ---
 
-    Clients that are not sampled or drop out mid-round: does the federation survive?
+    Phase 2: everyone joins one real federation, picks their local epochs and earns a contribution score.
 
-    <span class="ws-badge">:material-clock-outline: 9 min</span>
-    <span class="ws-badge">:material-account-group-outline: Group</span>
+    <span class="ws-badge">:material-clock-outline: 15 min</span>
+    <span class="ws-badge">:material-account-multiple-outline: Everyone</span>
 
-    [:octicons-arrow-right-24: Start](04-failures.md)
+    [:octicons-arrow-right-24: Start](04-room-federation.md)
 
 -   :material-numeric-5-circle-outline:{ .lg } **Debrief**
 
     ---
 
-    Compare the groups and connect with the cross-centre demo.
+    Room results and leaderboard, and the link to the cross-centre demo.
 
-    <span class="ws-badge">:material-clock-outline: 5 min</span>
+    <span class="ws-badge">:material-clock-outline: 10 min</span>
     <span class="ws-badge">:material-account-multiple-outline: Everyone</span>
 
     [:octicons-arrow-right-24: Start](05-debrief.md)
@@ -149,19 +142,20 @@ flowchart LR
 
 ## Run-config reference { #run-config }
 
-Each step changes only the `--run-config` string. These are all the keys:
+Each run changes only the `--run-config` string. These are all the keys:
 
 | Key | Values | Default | Used in |
 |---|---|---|---|
+| `run-name` | Letters, digits, `_`, `-`, `.` | run id | Every step (name in the dashboard) |
 | `partitioning` | `iid`, `dirichlet`, `pathological` | `iid` | [Step 1](01-first-run.md), [Step 2](02-heterogeneity.md) |
-| `dirichlet-alpha` | > 0; smaller = more uneven | `0.1` | [Step 2](02-heterogeneity.md) |
+| `dirichlet-alpha` | > 0; smaller = more uneven | `0.1` | [Step 2](02-heterogeneity.md), [Step 3](03-compute-vs-communication.md) |
 | `classes-per-partition` | Classes per client for `pathological` | `2` | [Step 1](01-first-run.md) |
 | `num-server-rounds` | Number of rounds | `10` | [Step 3](03-compute-vs-communication.md) |
 | `local-epochs` | Local epochs per round | `2` | [Step 3](03-compute-vs-communication.md) |
-| `fraction-train` | Share of clients sampled per round, 0 to 1 | `1.0` | [Step 4](04-failures.md) |
-| `dropout-rate` | Probability that a sampled client fails, 0 to 1 | `0.0` | [Step 4](04-failures.md) |
-| `proximal-mu` | ≥ 0; > 0 turns on FedProx | `0.0` | [Step 5, going further](05-debrief.md) |
-| `dataset` | `fashion_mnist`, `cifar10` | `fashion_mnist` | [Step 5, going further](05-debrief.md) |
+| `fraction-train` | Share of clients sampled per round, 0 to 1 | `1.0` | [Going further](05-debrief.md) |
+| `dropout-rate` | Probability that a sampled client fails, 0 to 1 | `0.0` | [Going further](05-debrief.md) |
+| `proximal-mu` | ≥ 0; > 0 turns on FedProx | `0.0` | [Going further](05-debrief.md) |
+| `dataset` | `fashion_mnist`, `cifar10` | `fashion_mnist` | [Going further](05-debrief.md) |
 
 Keep `learning-rate` (0.01), `batch-size` (32) and `seed` (42) as they are: the expected
 results assume these values. What the keys mean: [Concepts](../concepts.md).

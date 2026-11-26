@@ -8,7 +8,7 @@ hide:
 
 <div class="ws-meta" markdown="span">
   <span class="ws-badge">:material-flag-outline: Step 5 / 5</span>
-  <span class="ws-badge">:material-clock-outline: 5 min</span>
+  <span class="ws-badge">:material-clock-outline: 10 min</span>
   <span class="ws-badge">:material-account-multiple-outline: Everyone</span>
 </div>
 
@@ -16,20 +16,27 @@ hide:
 
 !!! abstract "Goal"
 
-    Put the groups' results side by side, and connect them with the cross-centre demo.
+    Read the room result and the leaderboard, compare them with phase 1, and connect
+    them with the cross-centre demo.
 
-## Compare the groups
+## The room result
+
+<!-- TODO: projector view (room run curve, leaderboard by seat), after the phase 2 prototype -->
+
+TBD: the room run and the leaderboard, shown on the projector.
+
+## Compare with phase 1
 
 <!-- TODO: filled in live by the trainers -->
 
-| Group | Mode | 1. Pathological | 2. IID / Dirichlet | 3. Best rounds × epochs | 4. Survived failures? |
-|:-----:|:----:|:---------------:|:------------------:|:-----------------------:|:---------------------:|
-| 1     |      |                 |                    |                         |                       |
-| 2     |      |                 |                    |                         |                       |
-| 3     |      |                 |                    |                         |                       |
-| 4     |      |                 |                    |                         |                       |
-| 5     |      |                 |                    |                         |                       |
-| 6     |      |                 |                    |                         |                       |
+| Group | 1. Pathological | 2. IID / Dirichlet | 3. Best rounds × epochs | 4. Epochs picked in the room run |
+|:-----:|:---------------:|:------------------:|:-----------------------:|:--------------------------------:|
+| 1     |                 |                    |                         |                                  |
+| 2     |                 |                    |                         |                                  |
+| 3     |                 |                    |                         |                                  |
+| 4     |                 |                    |                         |                                  |
+| 5     |                 |                    |                         |                                  |
+| 6     |                 |                    |                         |                                  |
 
 ## From the hands-on to the demo
 
@@ -47,10 +54,28 @@ problems (unequal data, slow clients, communication, failures) matter most there
 
 ??? tip "Going further"
 
-    - **Harder images**: `viz.run("cifar", "dataset='cifar10' partitioning='pathological'")`
-      (needs the CIFAR-10 data).
-    - **FedProx** penalises the distance between the local and the global model:
-      `viz.run("fedprox", "partitioning='dirichlet' dirichlet-alpha=0.1 proximal-mu=0.1", view="run")`.
-      Does it beat FedAvg here?
-    - Every key you can pass to `--run-config` is listed in the
-      [run-config reference](index.md#run-config) and in the last section of the notebook.
+    In the phase 1 notebook (*Going further* section):
+
+    - **Failures, simulated**: only 2 clients out of 5 per round, or a one-in-two chance
+      of dropping out.
+
+        ```python
+        !flwr run app --stream --run-config "run-name='participation_40' partitioning='dirichlet' dirichlet-alpha=0.1 fraction-train=0.4"
+        !flwr run app --stream --run-config "run-name='dropouts_50' partitioning='dirichlet' dirichlet-alpha=0.1 dropout-rate=0.5"
+        ```
+
+    - **FedProx** penalises the distance between the local and the global model. Does it
+      beat FedAvg here?
+
+        ```python
+        !flwr run app --stream --run-config "run-name='fedprox' partitioning='dirichlet' dirichlet-alpha=0.1 proximal-mu=0.1"
+        ```
+
+    - **Harder images** (needs the CIFAR-10 data):
+
+        ```python
+        !flwr run app --stream --run-config "run-name='cifar' dataset='cifar10' partitioning='pathological'"
+        ```
+
+    Every key you can pass to `--run-config` is in the
+    [run-config reference](index.md#run-config).

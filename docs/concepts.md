@@ -51,7 +51,7 @@ Federated learning (FL) is already used on such data:
     | Clients | A few institutions: hospitals, labs, HPC centres | Millions of phones or sensors |
     | Data per client | Large | Small |
     | Participation | Reliable, scheduled | Clients come and go |
-    | Example | **This workshop** (5 clients per federation) | Mobile keyboards |
+    | Example | **This workshop** (a handful of clients per federation) | Mobile keyboards |
 
     **Federated is not private by default.** Model weights still carry traces of the
     training data, so FL is one layer of a privacy design. Two common additions:
@@ -96,12 +96,12 @@ Two things to keep in mind:
     exchanged, `local-epochs` how much each client trains in between. At an equal budget
     (rounds × epochs), more local epochs means fewer exchanges but more drift toward each
     client's own data; more rounds means more communication but clients that stay
-    closer. Which side wins depends on the data: you measure it in
-    [step 3](hands-on/03-compute-vs-communication.md).
+    closer. Which side wins depends on the data: the
+    [hands-on](hands-on/index.md) lets you measure it.
 
     **Failures.** `fraction-train` sets the share of clients sampled per round,
     `dropout-rate` the chance that a sampled client fails. If nobody answers, the global
-    model stays unchanged ([step 4](hands-on/04-failures.md)).
+    model stays unchanged.
 
 ## Non-IID data
 
@@ -116,7 +116,7 @@ Two things to keep in mind:
 <figcaption>Fashion-MNIST over 5 clients (C1 to C5). Each dot is one class on one client, its area the number of images; bars show client sizes. Seed 42, illustration only.</figcaption>
 </figure>
 
-The hands-on splits Fashion-MNIST over 5 clients in three ways:
+The hands-on splits Fashion-MNIST over its clients in three ways:
 
 === "IID"
 
@@ -133,7 +133,7 @@ The hands-on splits Fashion-MNIST over 5 clients in three ways:
 === "Pathological"
 
     `partitioning='pathological'`: each client holds only 2 classes
-    (`classes-per-partition`). The extreme case of [step 1](hands-on/01-first-run.md).
+    (`classes-per-partition`). The most extreme case.
 
 - **Client drift**: local training pulls each client toward its own data, and the
   average of drifted models is worse.
@@ -151,8 +151,8 @@ The hands-on splits Fashion-MNIST over 5 clients in three ways:
 
     <p class="ws-formula">L<sub>k</sub>(w) + (μ / 2) · ‖w − w<sub>t</sub>‖²</p>
 
-    μ is `proximal-mu` (0 = plain FedAvg). It is not on the main hands-on path: try it in
-    the "Going further" box of [step 5](hands-on/05-debrief.md).
+    μ is `proximal-mu` (0 = plain FedAvg). It is not on the main hands-on path: try it
+    once you have finished, with `proximal-mu=0.1` on a Dirichlet split.
 
 ## Frameworks
 
@@ -178,15 +178,24 @@ The hands-on splits Fashion-MNIST over 5 clients in three ways:
 
 <figure class="ws-figure">
 --8<-- "figures/hub.svg"
-<figcaption>Each hands-on group is one federation. Setup and seats: <a href="hands-on/index.md">Hands-on</a>.</figcaption>
+<figcaption>How you join one: <a href="hands-on/index.md">Hands-on</a>.</figcaption>
 </figure>
 
 - **Same app in simulation and deployment**: only where the SuperNodes run changes.
 - **Every experiment changes the configuration, never the code**:
-  `flwr run . --run-config "partitioning='dirichlet'"`. All keys are in the
-  [run-config reference](hands-on/index.md#run-config).
-- **[NVIDIA FLARE](https://nvflare.readthedocs.io/)** targets production federations:
-  it runs the [demo](demo.md).
+  `flwr run . --run-config "partitioning='dirichlet'"`.
+
+!!! question "Why Flower here, and NVIDIA FLARE in the demo?"
+
+    They are the two mature general-purpose FL frameworks in 2026
+    ([benchmark](https://arxiv.org/html/2611.10688)), each strong at a different job.
+    **Flower** is built to write and learn FL apps: the same app runs in a notebook or
+    across machines, and each experiment is one `--run-config` change. That is the
+    hands-on. **[NVIDIA FLARE](https://nvflare.readthedocs.io/)** is built to operate
+    federations between institutions, with per-site certificates and a Slurm launcher,
+    and it already federates Isambard-AI, Jean Zay and Adastra
+    ([ConcordAI](https://www.bristol.ac.uk/research/centres/bristol-supercomputing/articles/2026/federated-learning-brics-genci.html)). That is the [demo](demo.md#hpc-context). The two are
+    compatible: FLARE can run Flower apps.
 
 ??? info "Learn more: Flower vs NVIDIA FLARE"
 

@@ -194,35 +194,38 @@ for alpha, title, sub, handson in panels:
         b)
 
 # ---------------------------------------------------------------- figure 3
-def person(x, y, cls="s-ink"):
-    return (f'<g transform="translate({x} {y})" class="{cls}" fill="none" stroke-width="1.8" stroke-linecap="round">'
-            '<circle cx="9" cy="6" r="4.5"/><path d="M1 21 c0-5 3.6-8 8-8 s8 3 8 8"/></g>')
-
 W3, H3 = 712, 320
 b = f'<rect x="1" y="1" width="{W3-2}" height="{H3-2}" rx="16" class="f-panel s-line" stroke-width="1.5"/>'
-b += t(20, 34, "One group = one federation", size=16, weight=700)
-b += t(20, 54, "Every group of the hands-on runs one federation like this", "t-muted", 13)
+b += t(20, 34, "One federation in Flower", size=16, weight=700)
+b += t(20, 54, "In the hands-on, you take part in a federation like this one", "t-muted", 13)
 # SuperLink
 b += '<rect x="256" y="84" width="200" height="56" rx="28" class="f-strong"/>'
 b += t(356, 108, "SuperLink", "t-on", 15, 700, "middle") + t(356, 126, "runs the rounds, averages", "t-on-soft", 12, anchor="middle")
-# group lead
+# flwr run
 b += '<rect x="30" y="84" width="170" height="56" rx="12" class="f-node s-node" stroke-width="1.5"/>'
-b += person(44, 100) + t(72, 107, "Group lead", size=13, weight=700) + t(72, 125, "starts it, launches runs", "t-muted", 11.5)
+b += (f'<g transform="translate(44 101)" class="s-ink" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
+      '<rect x="0" y="0" width="20" height="16" rx="3"/><path d="M5 6 l3 2.5 -3 2.5 M10 11 h5"/></g>')
+b += t(74, 107, "flwr run", size=13, weight=700) + t(74, 125, "submits app + run-config", "t-muted", 11.5)
 b += '<path d="M200 112 L250 112" class="s-ink" stroke-width="1.8" fill="none" marker-end="url(#ak)"/>'
 # note on the right
 b += '<line x1="490" y1="100" x2="490" y2="76" class="s-accent" stroke-width="2" marker-end="url(#ah)"/>'
 b += t(504, 92, "Each SuperNode connects", "t-muted", 12) + t(504, 108, "out to the SuperLink.", "t-muted", 12)
 b += (t(504, 128, "Global weights down,", "t-muted", 12) + t(504, 144, "updated weights up,", "t-muted", 12)
       + t(504, 160, "on that same connection.", "t-muted", 12))
-# seats
-for i in range(4):
+# clients
+labels = ["SuperNode 1", "SuperNode 2", "SuperNode 3", "SuperNode n"]
+for i, lab in enumerate(labels):
     x, y = 20 + i * 174, 222
-    b += f'<rect x="{x}" y="{y}" width="150" height="64" rx="12" class="f-node s-node" stroke-width="1.5"/>'
-    b += person(x + 14, y + 12) + t(x + 44, y + 27, f"Seat {i+1}", size=13, weight=700)
-    b += t(x + 44, y + 46, "SuperNode", "t-muted", 12) + db_icon(x + 118, y + 20, "s-accent", 0.95)
+    last = i == 3
+    dash = ' stroke-dasharray="5 4"' if last else ""
+    if i == 3:
+        b += t(x - 12, y + 37, "…", "t-muted", 18, 700, "middle")
+    b += f'<rect x="{x}" y="{y}" width="150" height="64" rx="12" class="f-node s-node" stroke-width="1.5"{dash}/>'
+    b += db_icon(x + 16, y + 21, "s-accent", 0.95) + t(x + 44, y + 30, lab, size=13, weight=700)
+    b += t(x + 44, y + 48, "its own data", "t-muted", 12)
     b += (f'<path d="M{x+75} {y-4} L{311 + i*30} 146" class="s-accent" stroke-width="1.8" fill="none" '
           'marker-end="url(#ah)"/>')
-b += t(20, 306, "One seat per member: a SuperNode that trains on its own data partition.", "t-muted", 12)
-svg("hub.svg", W3, H3, "One group is one federation: the group lead starts the SuperLink and launches the runs; each seat runs a SuperNode on its own data and connects out to the SuperLink.",
+b += t(20, 306, "One SuperNode per client site. Their number depends on the federation.", "t-muted", 12)
+svg("hub.svg", W3, H3, "One federation in Flower: flwr run submits the app to the SuperLink; each SuperNode trains on its own data and connects out to the SuperLink.",
     b, arrow_marker("ah", "f-accent") + arrow_marker("ak", "f-ink"))
 print(f"Figures written to {OUT}")

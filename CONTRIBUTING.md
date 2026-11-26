@@ -19,7 +19,7 @@ material is built and maintained.
 | Path | Content |
 |---|---|
 | `app/` | Flower app, a uv project (`pyproject.toml`, `uv.lock`, `LICENSE` copy required by Flower, `flworkshop/`). Details: [`app/README.md`](app/README.md) |
-| `notebooks/` | `simulation.ipynb` (fallback); lead and member notebooks to come |
+| `notebooks/` | `simulation.ipynb` (hands-on phase 1); `join.ipynb` (phase 2, room federation) to come |
 | `dashboard/` | Web dashboard served by `flworkshop/dashboard_server.py` |
 | `scripts/` | `prepare_data.py`, `show_partitions.py`, `calibrate.py`, `compute_baselines.py`, `compute_baselines.slurm` |
 | `references/` | `calibration/` results; solo/centralised baselines to come |

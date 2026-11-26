@@ -87,7 +87,8 @@ with the lead and member notebooks (not written yet).
 | `classes-per-partition` | 2 | Classes per client with `pathological` |
 | `seed` | 42 | Seed of the partitioning, the initial model and training (reproducible runs) |
 | `data-dir` | `""` | Folder of the `.pt` files; empty = `~/.cache/fl-workshop` |
-| `results-file` | `""` | Absolute path of a per-round results JSON; empty = disabled |
+| `run-name` | `""` | Name of the run in the dashboard (results file `<runs dir>/<run-name>.json`); empty = `run-<run id>` |
+| `results-file` | `""` | Absolute path of the results JSON, overrides `run-name` (used by `scripts/calibrate.py`) |
 
 ## See what each client receives
 
@@ -160,7 +161,7 @@ app/
 │   ├── baselines.py         # "Solo" and "centralised" references
 │   ├── dashboard_server.py  # Local HTTP server of the dashboard (files + JSON API)
 │   ├── paths.py             # Where dashboard/, references/ and results/ live
-│   └── viz.py               # Launch runs from the notebook, links to the dashboard
+│   └── viz.py               # Notebook setup (federation, data check) and dashboard link
 ├── pyproject.toml           # Dependencies, app configuration, CPU PyTorch index
 ├── uv.lock
 └── .python-version
@@ -199,9 +200,12 @@ uv sync --project app --group notebook
 uv run --project app jupyter lab notebooks/simulation.ipynb
 ```
 
-The notebook launches the experiments; the results show up in a **web dashboard**,
-opened in a tab next to it and updated every round. `viz.setup()` starts its server (on
-`127.0.0.1:8050`, or the next free port) and prints the link.
+The notebook launches every run with Flower's own command,
+`!flwr run app --stream --run-config "..."`, as in a terminal. The ServerApp writes one
+results JSON per run to the runs folder (`~/.cache/fl-workshop/runs`, or
+`FL_WORKSHOP_RUNS`), and a **web dashboard**, opened in a tab next to the notebook,
+lists that folder and follows the latest run, round by round. `viz.setup()` starts its
+server (on `127.0.0.1:8050`, or the next free port) and prints the link.
 
 | Tab | Content |
 |---|---|
@@ -212,24 +216,23 @@ opened in a tab next to it and updated every round. `viz.setup()` starts its ser
 
 | Function | Role |
 |---|---|
-| `viz.setup(num_clients=5, cpus=2)` | Environment variables, simulated federation, data check, dashboard start; restarts a local SuperLink started without the right variables |
-| `viz.run(name, run_config="", view="together")` | Prints and launches `flwr run app --stream --run-config "<run_config>"`, shows its progress, with a link to the `view` tab (`together`, `run`, `network`, `compare`) |
-| `viz.command(run_config)` | The `flwr run` command for a run config, without launching it |
-| `viz.open(name, view=...)` | Link to a run and a dashboard tab |
-| `viz.log(name)` | Key lines of the Flower log |
-| `viz.stop()` | Stops the run in progress |
-| `viz.show(name)`, `viz.compare(*names)`, `viz.partitions(**config)` | matplotlib figures, outside the browser (not in the hands-on path) |
+| `viz.setup(num_clients=5, cpus=2)` | Environment variables, simulated federation, data check, dashboard start; restarts a local SuperLink started without the right variables; moves to the repository root and puts this environment's `flwr` first on the PATH, so `!flwr run app ...` works |
+| `viz.dashboard(name=None, view="together")` | Link to the dashboard, on a run and a tab (`together`, `run`, `network`, `compare`); without a name, it follows the latest run |
 
-The run config is written as in a terminal, e.g.
-`viz.run("dirichlet", "partitioning='dirichlet' dirichlet-alpha=0.1")`; keyword arguments
-with underscores (`fraction_train=0.4`) are still accepted and appended. Results and logs: `results/notebook/<name>.json` and `.log`. `setup()`
-also sets `OMP_NUM_THREADS=1`: one thread per process, to share the machine.
+Other Flower commands work the same way from the notebook: `!flwr ls` (runs known to
+the SuperLink), `!flwr log <run id> --show`, `!flwr stop <run id>`. `setup()` also sets
+`OMP_NUM_THREADS=1`: one thread per process, to share the machine.
+
+**Runs folder on a shared machine.** The ServerApp runs under the account that started
+the SuperLink. To let several users read the same results (one SuperLink for a group or
+a room), set `FL_WORKSHOP_RUNS` to a shared folder both where the SuperLink starts and
+in the notebooks that open the dashboard.
 
 **Dashboard access.** The server only listens on the local machine:
 - notebook on your own computer: the `http://localhost:8050/` link opens directly;
 - JupyterHub: the link goes through `jupyter-server-proxy` (`…/user/<name>/proxy/8050/`),
   to install on the hub;
-- Google Colab: `viz.open()` goes through Colab's proxy;
+- Google Colab: `viz.dashboard()` goes through Colab's proxy;
 - remote JupyterLab over an SSH tunnel: add `-L 8050:localhost:8050` to the tunnel.
 
 **What the Network tab shows.** The server receives a round's replies as one batch; the

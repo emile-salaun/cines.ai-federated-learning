@@ -32,7 +32,7 @@ nav = [
     { "1. First run" = "hands-on/01-first-run.md" },
     { "2. Heterogeneity" = "hands-on/02-heterogeneity.md" },
     { "3. Compute vs communication" = "hands-on/03-compute-vs-communication.md" },
-    { "4. Failures" = "hands-on/04-failures.md" },
+    { "4. Room federation" = "hands-on/04-room-federation.md" },
     { "5. Debrief" = "hands-on/05-debrief.md" },
   ] },
   { "Resources" = "resources.md" },

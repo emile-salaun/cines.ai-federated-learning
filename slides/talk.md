@@ -70,10 +70,10 @@ Speaker notes (0:20 to 1:00)
 <div class="slot talk now"><span class="time">30′</span><span><span class="what">Talk</span><br><span class="detail">Concepts, frameworks, FL on HPC</span></span></div>
 <div class="slot demo"><span class="time">15′</span><span><span class="what">Demo</span><br><span class="detail">NVIDIA FLARE across two HPC centres</span></span></div>
 <div class="slot break"><span class="time">15′</span><span><span class="what">Break</span><br><span class="detail">Form your group</span></span></div>
-<div class="slot handson"><span class="time">60′</span><span><span class="what">Hands-on</span><br><span class="detail">Flower, in groups of 4–5: one federation per group, your notebook is one client</span></span></div>
+<div class="slot handson"><span class="time">60′</span><span><span class="what">Hands-on</span><br><span class="detail">Flower: simulate in your notebook, then the whole room federates</span></span></div>
 </div>
 
-By the end, your group will have trained a model **together**, without sharing a single image, and seen when this works and when it breaks.
+By the end, the whole room will have trained one model **together**, without sharing a single image, and you will have seen when this works and when it breaks.
 
 <!--
 Speaker notes (1:00 to 1:30)
@@ -192,6 +192,29 @@ The exercises use **α = 0.1**.
 
 <!-- _class: draft -->
 
+<span class="kicker">FL on HPC <em>5 min</em></span>
+
+## Why two frameworks?
+
+<div class="stage">
+<div class="grid-2">
+<div class="tile "><span class="tag">Hands-on</span><h3>Flower: build and learn</h3><p>The same app runs in a notebook or across machines. Each experiment is one <code style="white-space: nowrap">--run-config</code> change.</p></div>
+<div class="tile dark"><span class="tag">Demo</span><h3>NVIDIA FLARE: operate across sites</h3><p>Per-site certificates, Slurm launcher, clients that only connect out. Already federates Isambard&#8209;AI, Jean Zay and Adastra.</p></div>
+</div>
+<div class="takeaway">The two mature FL frameworks in 2026, and compatible: FLARE can run Flower apps.</div>
+<span class="tiny">Sources: arXiv 2611.10688 · bristol.ac.uk (BriCS–GENCI, 2026) · nvflare.readthedocs.io</span>
+</div>
+
+<!--
+Speaker notes
+- Fit, not capability: Flower can also run on HPC (SuperNodes as Slurm jobs, TLS, node authentication).
+- ConcordAI (BriCS and GENCI, with IDRIS and CINES) uses NVIDIA FLARE between Isambard-AI, Jean Zay and Adastra.
+-->
+
+---
+
+<!-- _class: draft -->
+
 <span class="kicker">Demo <em>15 min</em></span>
 
 ## Federated learning across two HPC centres
@@ -240,14 +263,19 @@ Speaker notes (after the demo)
 
 <div class="progress"><i class="on"></i><i class=""></i><i class=""></i></div>
 
-<span class="kicker">Hands-on · step 1 of 3 · timing TBD</span>
+<span class="kicker">Hands-on · phase 1 of 3 · 35 min</span>
 
-## Group deployment
+## Simulate
 
 <div class="stage">
-<div class="countdown" data-minutes="20" title="Click: pause / resume · Double-click: reset">20:00</div>
-<ul><li>Lead: start the SuperLink, then the run</li><li>Members: start your SuperNode</li><li><strong>Done when</strong> your group sees round 1</li></ul>
+<div class="countdown" data-minutes="35" title="Click: pause / resume · Double-click: reset">35:00</div>
+<ul><li>Steps 0 to 3 in <strong>your own</strong> notebook</li><li><strong>Predict</strong> with your group before every run</li><li><strong>Done when</strong> your group table of step 3 is filled in</li></ul>
 </div>
+
+<!--
+Speaker notes
+- Setup 5 min, then about 10 min per step. At 0:00 everyone moves to phase 2, finished or not.
+-->
 
 ---
 
@@ -255,13 +283,34 @@ Speaker notes (after the demo)
 
 <div class="progress"><i class="done"></i><i class="on"></i><i class=""></i></div>
 
-<span class="kicker">Hands-on · step 2 of 3 · timing TBD</span>
+<span class="kicker">Hands-on · phase 2 of 3 · 15 min</span>
 
-## Experiments
+## Federate the room
 
 <div class="stage">
-<div class="countdown" data-minutes="30" title="Click: pause / resume · Double-click: reset">30:00</div>
-<ul><li>Change <strong>only</strong> <code>--run-config</code></li><li>Note your results in the table on the site</li><li><strong>Done when</strong> your group has run A, B and C</li></ul>
+<div class="countdown" data-minutes="15" title="Click: pause / resume · Double-click: reset">15:00</div>
+<ul><li>Start <strong>your</strong> SuperNode: one real client per seat</li><li>Pick your local epochs: the round has a deadline</li><li><strong>Done when</strong> your seat is on the leaderboard</li></ul>
+</div>
+
+<!--
+Speaker notes
+- Join notebook, deadline and leaderboard: to finalise after the phase 2 prototype.
+- Halfway: ask half the room to stop their SuperNode, then to rejoin.
+-->
+
+---
+
+<!-- _class: clock -->
+
+<div class="progress"><i class="done"></i><i class="done"></i><i class="on"></i></div>
+
+<span class="kicker">Hands-on · phase 3 of 3 · 10 min</span>
+
+## Debrief
+
+<div class="stage">
+<div class="countdown" data-minutes="10" title="Click: pause / resume · Double-click: reset">10:00</div>
+<ul><li>Room result and leaderboard</li><li>Your local-epochs choice versus step 3</li><li>Back to the demo: what changes between two HPC centres?</li></ul>
 </div>
 
 ---
@@ -270,18 +319,18 @@ Speaker notes (after the demo)
 
 
 
-<span class="kicker">Hands-on · plan B</span>
+<span class="kicker">Hands-on · if the hub fails</span>
 
-## Switch to the local simulation
+## Simulate anywhere
 
 <div class="stage">
 
-<ul><li>Same app, same experiments, <strong>5 virtual clients</strong> in one notebook</li><li>Runs on the hub, on Colab, or on your laptop</li><li>Your results stay comparable with the other groups</li></ul>
+<ul><li>Phase 1 runs on <strong>Colab or your laptop</strong>: same notebook, same app</li><li>Phase 2 becomes a trainer-run federation on the projector</li><li>Your results stay comparable with the rest of the room</li></ul>
 </div>
 
 <!--
 Speaker notes
-- Use only if the hub or the room network fails. Switch criterion: TBD.
+- A group whose setup fails falls back to the simulation notebook; the trainers decide case by case.
 -->
 
 <script src="widgets.js"></script>

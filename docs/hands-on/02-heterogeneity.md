@@ -8,7 +8,7 @@ hide:
 
 <div class="ws-meta" markdown="span">
   <span class="ws-badge">:material-flag-outline: Step 2 / 5</span>
-  <span class="ws-badge">:material-clock-outline: 12 min</span>
+  <span class="ws-badge">:material-clock-outline: 10 min</span>
   <span class="ws-badge">:material-account-group-outline: Group</span>
 </div>
 
@@ -30,21 +30,22 @@ more images than others. Before running, write down in your group:
 ## 2.2 Run both
 
 ```python
-viz.run("iid", "partitioning='iid'")
-viz.run("dirichlet", "partitioning='dirichlet' dirichlet-alpha=0.1")
+!flwr run app --stream --run-config "run-name='iid' partitioning='iid'"
 ```
 
-Run one cell after the other: a new run stops the one in progress.
+```python
+!flwr run app --stream --run-config "run-name='dirichlet' partitioning='dirichlet' dirichlet-alpha=0.1"
+```
 
 !!! checkpoint "You should see"
 
-    Two runs at **round 10 of 10**. In the **Compare** tab, the curves of `pathological`,
-    `iid` and `dirichlet` on one chart, and a summary table.
+    Both logs end at `[ROUND 10/10]`. In the dashboard's **Compare** tab, the curves of
+    `pathological`, `iid` and `dirichlet` on one chart, and a summary table.
 
 ## 2.3 Look at the timeline
 
 ```python
-viz.open("dirichlet", view="network")
+viz.dashboard("dirichlet", view="network")
 ```
 
 !!! checkpoint "You should see"
@@ -73,7 +74,7 @@ viz.open("dirichlet", view="network")
 
 ??? question "Stuck?"
 
-    - **`viz.run` says the previous run is still running**: it stops it and starts the
-      new one. Launch the two runs one after the other, waiting for the end of each.
+    - **The dashboard shows another run**: pick the run in the menu at the top right, or
+      choose *Follow the latest run*.
 
 [:octicons-arrow-right-24: Step 3: Compute vs communication](03-compute-vs-communication.md){ .md-button .md-button--primary }

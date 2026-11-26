@@ -3,6 +3,7 @@
 import json
 import math
 import random
+import re
 import time
 from pathlib import Path
 
@@ -12,6 +13,7 @@ from flwr.serverapp import Grid, ServerApp
 from flwr.serverapp.strategy import FedAvg
 
 from flworkshop.data import class_names, input_shape, load_test, load_test_subset
+from flworkshop.paths import RUNS_DIR
 from flworkshop.task import build_model, test_per_class
 
 app = ServerApp()
@@ -19,11 +21,26 @@ app = ServerApp()
 DEVICE = torch.device("cpu")
 
 
+def results_path(cfg, run_id: int) -> str:
+    """Where this run's results go: `results-file` if set, else RUNS_DIR/<run-name>.json.
+
+    The dashboard lists every JSON in RUNS_DIR, so a run started with a plain
+    `flwr run` shows up without any extra option. An empty or invalid `run-name`
+    falls back to run-<run id>.
+    """
+    if cfg.get("results-file"):
+        return str(cfg["results-file"])
+    name = str(cfg.get("run-name", ""))
+    if not re.fullmatch(r"[A-Za-z0-9_.-]+", name):
+        name = f"run-{run_id}"
+    return str(RUNS_DIR / f"{name}.json")
+
+
 class ResultsWriter:
     """Write per-round results to a JSON file, rewritten after every round.
 
-    Disabled when ``results-file`` is empty. The path must be absolute: the app runs
-    from a copy installed under ~/.flwr/apps/, not from the project directory.
+    The path must be absolute: the app runs from a copy installed under ~/.flwr/apps/,
+    not from the project directory (see `results_path`).
 
     Each round entry holds the global model's results and, per client (partition id),
     what the server saw: status (ok / failed / idle), local model accuracy on a test
@@ -238,7 +255,7 @@ def main(grid: Grid, context: Context) -> None:
     shape = input_shape(cfg)
     classes = class_names(cfg)
     testloader = load_test(cfg)  # loaded once, reused every round
-    writer = ResultsWriter(str(cfg.get("results-file", "")), cfg, classes)
+    writer = ResultsWriter(results_path(cfg, context.run_id), cfg, classes)
 
     def global_evaluate(server_round: int, arrays: ArrayRecord) -> MetricRecord:
         """Evaluate the global model on the centralized test set."""

@@ -29,8 +29,17 @@ Silos on HPC meet constraints the cloud does not have:
   connections, so clients connect out to the server and data are staged beforehand.
 - **Identity**: accounts, certificates and allowed hosts differ between centres.
 
+**Why NVIDIA FLARE here.** It answers each constraint: its
+[Slurm launcher](https://nvflare.readthedocs.io/en/main/user_guide/admin_guide/deployment/slurm_job_launcher.html) (version 2.9) submits client jobs
+to the batch queue, clients only connect out to the server, and provisioning gives every
+site its own startup kit and certificates. It is also what ConcordAI uses to federate
+Isambard-AI, Jean Zay and Adastra ([BriCS–GENCI, 2026](https://www.bristol.ac.uk/research/centres/bristol-supercomputing/articles/2026/federated-learning-brics-genci.html)).
+The hands-on uses Flower instead: see [why](concepts.md#frameworks).
+
 ??? info "Learn more: FL on HPC in 2026"
 
+    - **ConcordAI** (BriCS and GENCI, with IDRIS and CINES) federates Isambard-AI, Jean Zay
+      and Adastra with NVIDIA FLARE ([BriCS–GENCI, 2026](https://www.bristol.ac.uk/research/centres/bristol-supercomputing/articles/2026/federated-learning-brics-genci.html)).
     - **Argonne** ran APPFL across four DOE supercomputers (Polaris, Aurora, Frontier,
       Perlmutter), with asynchronous aggregation to cope with queue waits
       ([Li et al., 2026](https://arxiv.org/abs/2603.19544); [FedQueue](https://arxiv.org/abs/2605.02125)).

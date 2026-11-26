@@ -5,7 +5,7 @@ on 127.0.0.1: open it in a browser on the same machine, or through the JupyterHu
 (jupyter-server-proxy) on a hub.
 
     GET /                 -> dashboard/index.html (and its files)
-    GET /api/runs         -> list of runs (results/notebook/*.json)
+    GET /api/runs         -> list of runs (RUNS_DIR/*.json, written by the ServerApp)
     GET /api/run/<name>   -> run results + "solo / centralised" references + data
 """
 
@@ -18,9 +18,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 from flworkshop.paths import DASHBOARD_DIR as STATIC_DIR
-from flworkshop.paths import RESULTS_DIR as _RESULTS_ROOT
-
-RESULTS_DIR = _RESULTS_ROOT / "notebook"
+from flworkshop.paths import RUNS_DIR as RESULTS_DIR
 NAME = re.compile(r"^[A-Za-z0-9_.-]+$")
 
 _SERVER: dict = {}

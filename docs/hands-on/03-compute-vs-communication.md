@@ -8,7 +8,7 @@ hide:
 
 <div class="ws-meta" markdown="span">
   <span class="ws-badge">:material-flag-outline: Step 3 / 5</span>
-  <span class="ws-badge">:material-clock-outline: 12 min</span>
+  <span class="ws-badge">:material-clock-outline: 10 min</span>
   <span class="ws-badge">:material-account-group-outline: Group</span>
 </div>
 
@@ -30,42 +30,45 @@ step 2. Before running, write down in your group:
 - whether the accuracy drops, on IID data and on Dirichlet data;
 - on which data it drops more, and why.
 
-## 3.2 Run
+## 3.2 Split the runs in your group
 
-Run both, then compare with `iid` and `dirichlet` from step 2:
+Each seat runs one line (in the notebook, each seat has its own cell), then shares its
+numbers. Time left? Run another one.
+
+| Seat | Data | Rounds × local epochs |
+|:---:|:---:|:---:|
+| 1 | Dirichlet | 20 × 1 |
+| 2 | Dirichlet | 5 × 4 |
+| 3 | Dirichlet | 2 × 10 |
+| 4 and more | IID | 2 × 10 |
 
 ```python
-viz.run("iid_r2_ep10", "partitioning='iid' num-server-rounds=2 local-epochs=10", view="compare")
-viz.run("dirichlet_r2_ep10", "partitioning='dirichlet' dirichlet-alpha=0.1 num-server-rounds=2 local-epochs=10", view="compare")
+# Seat 1
+!flwr run app --stream --run-config "run-name='dirichlet_r20_ep1' partitioning='dirichlet' dirichlet-alpha=0.1 num-server-rounds=20 local-epochs=1"
+# Seat 2
+!flwr run app --stream --run-config "run-name='dirichlet_r5_ep4' partitioning='dirichlet' dirichlet-alpha=0.1 num-server-rounds=5 local-epochs=4"
+# Seat 3
+!flwr run app --stream --run-config "run-name='dirichlet_r2_ep10' partitioning='dirichlet' dirichlet-alpha=0.1 num-server-rounds=2 local-epochs=10"
+# Seat 4 and more
+!flwr run app --stream --run-config "run-name='iid_r2_ep10' partitioning='iid' num-server-rounds=2 local-epochs=10"
 ```
 
 !!! checkpoint "You should see"
 
-    Two short runs: **round 2 of 2**, each round longer than in step 2. In the
-    **Compare** tab, the new runs next to `iid` and `dirichlet`.
+    The log ends at the last round of your split (`[ROUND 20/20]`, `[ROUND 5/5]` or
+    `[ROUND 2/2]`). Fewer rounds means longer rounds.
 
 ## 3.3 Fill in the group table
 
-Complete the budget with two more splits of the same 20 epochs, on Dirichlet data.
-**Simulation**: split them across the group (seats 1–2 the first, seats 3–5 the second)
-and share your numbers. **Deployed**: the lead runs both if time allows.
+The **Network** tab gives the volume exchanged by a run; the **Compare** tab gives its
+final accuracy. The 10 × 2 row comes from step 2.
 
-```python
-viz.run("dirichlet_r20_ep1", "partitioning='dirichlet' dirichlet-alpha=0.1 num-server-rounds=20 local-epochs=1", view="compare")
-viz.run("dirichlet_r5_ep4", "partitioning='dirichlet' dirichlet-alpha=0.1 num-server-rounds=5 local-epochs=4", view="compare")
-```
-
-| Rounds × local epochs | MB exchanged | Final accuracy, IID | Final accuracy, Dirichlet | Run time |
-|:---:|:---:|:---:|:---:|:---:|
-| 20 × 1 | | – | | |
-| 10 × 2 (step 2) | | | | |
-| 5 × 4 | | – | | |
-| 2 × 10 | | | | |
-
-!!! checkpoint "You should see"
-
-    The **Network** tab gives the volume exchanged by each run; the **Compare** tab gives
-    the final accuracies.
+| Rounds × local epochs | MB exchanged | Final accuracy, IID | Final accuracy, Dirichlet |
+|:---:|:---:|:---:|:---:|
+| 20 × 1 | | – | |
+| 10 × 2 (step 2) | | | |
+| 5 × 4 | | – | |
+| 2 × 10 | | | |
 
 ## Discuss
 
@@ -75,11 +78,16 @@ viz.run("dirichlet_r5_ep4", "partitioning='dirichlet' dirichlet-alpha=0.1 num-se
    average. Where have you met this trade-off between local work and synchronisation
    in HPC?
 
+!!! tip "Keep this in mind for phase 2"
+
+    In the room federation, everyone picks their own local epochs. Your answer to
+    question 3 is your strategy.
+
 ## Done?
 
 <div class="ws-checklist" markdown>
 
-- [ ] The 2 × 10 runs reached their last round
+- [ ] My split reached its last round
 - [ ] Our group table is filled in
 - [ ] We know when talking less pays off
 
@@ -90,4 +98,4 @@ viz.run("dirichlet_r5_ep4", "partitioning='dirichlet' dirichlet-alpha=0.1 num-se
     - **No solo or centralised curves for these runs**: expected, the references exist
       only for 10 rounds × 2 epochs. Use the **Compare** tab.
 
-[:octicons-arrow-right-24: Step 4: Failures](04-failures.md){ .md-button .md-button--primary }
+[:octicons-arrow-right-24: Step 4: Room federation](04-room-federation.md){ .md-button .md-button--primary }
