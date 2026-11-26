@@ -93,11 +93,11 @@ flowchart LR
 
     [:octicons-arrow-right-24: Start](02-heterogeneity.md)
 
--   :material-numeric-3-circle-outline:{ .lg } **Compute vs communication**
+-   :material-numeric-3-circle-outline:{ .lg } **TBD**
 
     ---
 
-    Same compute budget, fewer or more rounds: when does talking less pay off? The group splits the runs.
+    {% if scenario == "A" %}Same compute budget, fewer or more rounds: when does talking less pay off? The group splits the runs.{% else %}To be determined.{% endif %}
 
     <span class="ws-badge">:material-clock-outline: 10 min</span>
     <span class="ws-badge">:material-account-group-outline: Group</span>

@@ -4,7 +4,7 @@ hide:
   - toc
 ---
 
-# 3. Compute vs communication
+# 3. TBD
 
 <div class="ws-meta" markdown="span">
   <span class="ws-badge">:material-flag-outline: Step 3 / 5</span>
@@ -13,6 +13,10 @@ hide:
 </div>
 
 --8<-- "hands-on-stepper.md"
+
+<!-- Scenario switch: [project.extra] scenario in zensical.toml. In scenario B this
+     step is to be determined; the exercise below is the scenario A version. -->
+{% if scenario == "A" %}
 
 !!! abstract "Goal"
 
@@ -30,19 +34,11 @@ step 2. Before running, write down in your group:
 - whether the accuracy drops, on IID data and on Dirichlet data;
 - on which data it drops more, and why.
 
-{% if scenario == "A" %}
 ## 3.2 Split the runs in your group
 
-Each seat runs one line (in the notebook, each run has its own cell), then shares its
+Each seat runs one line (copy it into a new notebook cell), then shares its
 numbers: seat 1 takes run 1, seat 2 run 2, seat 3 run 3, seats 4 and more run 4.
 Time left? Run another one.
-{% else %}
-## 3.2 Split the runs with your neighbours
-
-Each of you runs one line (in the notebook, each run has its own cell), so that the
-four runs are covered between you, then share your numbers. Alone? Start with runs 3
-and 4. Time left? Run another one.
-{% endif %}
 
 | Run | Data | Rounds × local epochs |
 |:---:|:---:|:---:|
@@ -106,5 +102,15 @@ final accuracy. The 10 × 2 row comes from step 2.
 
     - **No solo or centralised curves for these runs**: expected, the references exist
       only for 10 rounds × 2 epochs. Use the **Compare** tab.
+
+{% else %}
+
+<!-- TODO: scenario B step 3 to be determined -->
+
+!!! warning "To be determined"
+
+    This step is being redesigned. Go on to step 4.
+
+{% endif %}
 
 [:octicons-arrow-right-24: Step 4: Room federation](04-room-federation.md){ .md-button .md-button--primary }

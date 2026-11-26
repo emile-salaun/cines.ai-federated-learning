@@ -77,4 +77,4 @@ viz.dashboard("dirichlet", view="network")
     - **The dashboard shows another run**: pick the run in the menu at the top right, or
       choose *Follow the latest run*.
 
-[:octicons-arrow-right-24: Step 3: Compute vs communication](03-compute-vs-communication.md){ .md-button .md-button--primary }
+[:octicons-arrow-right-24: Step 3: TBD](03-compute-vs-communication.md){ .md-button .md-button--primary }
