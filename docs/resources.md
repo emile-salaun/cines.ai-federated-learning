@@ -52,4 +52,12 @@ The papers behind the [Concepts](concepts.md) page.
 - Oldenhof et al., *Industry-Scale Orchestrated Federated Learning for Drug Discovery*
   (MELLODDY), 2022: [arXiv:2210.08871](https://arxiv.org/abs/2210.08871)
 
-**FL on HPC**: see the [HPC context](demo.md#hpc-context) on the Demo page.
+**FL on HPC**: 
+
+- Kotevska et al., *From Pilots to Production: Lessons in Cross-Institutional Federated
+  Training and Artificial Intelligence for Science*, 2026:
+  [arXiv:2609.39803](https://arxiv.org/abs/2609.39803) (lessons from DOE deployments)
+- Wright et al., *Placing the Control Plane: Cloud-Native Federated Learning Across
+  Batch-Scheduled HPC*, 2026: [arXiv:2611.30381](https://arxiv.org/abs/2611.30381)
+  (Flower inside FLARE across three UK systems)
+- Deployments and projects: see the [HPC context](demo.md#hpc-context) on the Demo page.

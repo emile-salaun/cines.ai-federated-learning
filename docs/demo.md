@@ -38,8 +38,6 @@ The hands-on uses Flower instead: see [why](concepts.md#frameworks).
 
 ??? info "Learn more: FL on HPC in 2026"
 
-    - **ConcordAI** (BriCS and GENCI, with IDRIS and CINES) federates Isambard-AI, Jean Zay
-      and Adastra with NVIDIA FLARE ([BriCS–GENCI, 2026](https://www.bristol.ac.uk/research/centres/bristol-supercomputing/articles/2026/federated-learning-brics-genci.html)).
     - **Argonne** ran APPFL across four DOE supercomputers (Polaris, Aurora, Frontier,
       Perlmutter), with asynchronous aggregation to cope with queue waits
       ([Li et al., 2026](https://arxiv.org/abs/2603.19544); [FedQueue](https://arxiv.org/abs/2605.02125)).
