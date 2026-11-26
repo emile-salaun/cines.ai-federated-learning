@@ -8,8 +8,8 @@
                  updates back, aggregation. Round counter 1..10.
    2. demo-map   <figure data-ws-widget="demo-map" data-sites="adastra,jeanzay"
                          data-tbc="jeanzay">
-                 (demo.md) Map of France with the two demo sites and model
-                 updates travelling between them. Sites: see SITES below.
+                 (demo.md) Map of France with the two demo sites and the
+                 weights travelling between them. Sites: see SITES below.
                  data-tbc (optional) lists sites shown as "to be confirmed":
                  dashed marker and label. Remove it once the site is official.
 
@@ -57,18 +57,18 @@
   const ROUNDS = 10;
   const PHASE_MS = 1400;
   const PHASES = [
-    "The server sends the global model",
+    "The server sends the global weights",
     "Each client trains on its own data",
-    "Only model updates go back. The data stays.",
+    "Only updated weights go back. The data stays.",
     "The server averages them (FedAvg)",
   ];
 
   function flRound(box) {
     const W = 360, H = 345, CX = 180, CY = 172, R = 112, N = 5;
     const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, class: "ws-round", role: "img",
-      "aria-label": "Animation of a federated learning round: the server sends the model "
-        + "to 5 clients, they train on their local data and send back only model updates, "
-        + "which the server averages." });
+      "aria-label": "Animation of a federated learning round: the server sends the global "
+        + "weights to 5 clients, they train on their local data and send back only their "
+        + "updated weights, which the server averages." });
     const links = el("g", { class: "ws-round__links" }, svg);
     const packets = el("g", { class: "ws-round__packets" }, svg);
 
@@ -124,7 +124,7 @@
       // Still frame: updates halfway back to the server.
       draw(2 * PHASE_MS + PHASE_MS / 2);
       roundText.textContent = "One round";
-      caption.textContent = "Model out, training on local data, updates back";
+      caption.textContent = "Weights out, training on local data, updated weights back";
       return;
     }
     draw(0);
@@ -165,7 +165,7 @@
     const svg = el("svg", { viewBox: `-10 -10 ${FRANCE.w + 20} ${FRANCE.h + 20}`,
       class: "ws-map__svg", role: "img",
       "aria-label": `Map of France: ${a.name} (${a.centre}, ${a.city}) and ${b.name} `
-        + `(${b.centre}, ${b.city})${b.tbc ? ", to be confirmed," : ""} exchange model updates; `
+        + `(${b.centre}, ${b.city})${b.tbc ? ", to be confirmed," : ""} exchange weights; `
         + "the data stays on each cluster." });
     el("path", { d: FRANCE.d, class: "ws-map__land" }, svg);
 
@@ -207,7 +207,7 @@
     box.textContent = "";
     box.appendChild(svg);
     const cap = document.createElement("figcaption");
-    cap.textContent = "Model updates travel between the two centres. "
+    cap.textContent = "Weights travel between the two centres. "
       + "The training data never leaves its cluster.";
     box.appendChild(cap);
 

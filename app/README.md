@@ -112,6 +112,7 @@ uv run --project app python scripts/calibrate.py --phase hparams        # lr x l
 uv run --project app python scripts/calibrate.py --phase noniid         # IID, Dirichlet 1.0 / 0.3 / 0.1, pathological
 uv run --project app python scripts/calibrate.py --phase fedprox        # Dirichlet 0.1 with mu = 0, 0.01, 0.1, 1
 uv run --project app python scripts/calibrate.py --phase participation  # fraction-train and dropout-rate, Dirichlet 0.1
+uv run --project app python scripts/calibrate.py --phase commcomp       # rounds x local epochs at equal budget, IID and Dirichlet 0.1
 uv run --project app python scripts/calibrate.py --phase noniid --report-only   # print again without running
 ```
 
@@ -212,14 +213,16 @@ opened in a tab next to it and updated every round. `viz.setup()` starts its ser
 | Function | Role |
 |---|---|
 | `viz.setup(num_clients=5, cpus=2)` | Environment variables, simulated federation, data check, dashboard start; restarts a local SuperLink started without the right variables |
-| `viz.run(name, view="together", **config)` | Launches a run and shows its progress, with a link to the `view` tab (`together`, `run`, `network`, `compare`) |
+| `viz.run(name, run_config="", view="together")` | Prints and launches `flwr run app --stream --run-config "<run_config>"`, shows its progress, with a link to the `view` tab (`together`, `run`, `network`, `compare`) |
+| `viz.command(run_config)` | The `flwr run` command for a run config, without launching it |
 | `viz.open(name, view=...)` | Link to a run and a dashboard tab |
 | `viz.log(name)` | Key lines of the Flower log |
 | `viz.stop()` | Stops the run in progress |
 | `viz.show(name)`, `viz.compare(*names)`, `viz.partitions(**config)` | matplotlib figures, outside the browser (not in the hands-on path) |
 
-Configuration keys use underscores (`fraction_train=0.4`) and are passed to
-`--run-config`. Results and logs: `results/notebook/<name>.json` and `.log`. `setup()`
+The run config is written as in a terminal, e.g.
+`viz.run("dirichlet", "partitioning='dirichlet' dirichlet-alpha=0.1")`; keyword arguments
+with underscores (`fraction_train=0.4`) are still accepted and appended. Results and logs: `results/notebook/<name>.json` and `.log`. `setup()`
 also sets `OMP_NUM_THREADS=1`: one thread per process, to share the machine.
 
 **Dashboard access.** The server only listens on the local machine:

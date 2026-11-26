@@ -23,3 +23,5 @@ site/
 startup/
 
 .git-rewrite
+._dbindex_
+*.patch

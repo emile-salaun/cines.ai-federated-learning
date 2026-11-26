@@ -2,13 +2,13 @@
 
     from flworkshop import viz
     viz.setup()                                       # once: federation + dashboard
-    viz.run("pathological", partitioning="pathological")
+    viz.run("pathological", "partitioning='pathological'")
     viz.open("pathological", view="network")          # link to one dashboard view
 
 The dashboard (dashboard/ folder) opens in a browser tab and updates every round.
-Configuration keys are written with underscores (`fraction_train=0.4`) and converted to
-Flower keys (`fraction-train`); they are passed to `flwr run --run-config`, the app code
-never changes. Each run writes its results to results/notebook/<name>.json.
+The configuration is a `flwr run --run-config` string, in Flower's syntax (the same as in
+a terminal, and as in deployed mode); `run()` prints the command it executes. The app
+code never changes. Each run writes its results to results/notebook/<name>.json.
 
 The matplotlib figures (`show`, `compare`, `partitions`) remain available outside the
 browser, but are no longer part of the hands-on path.
@@ -168,12 +168,27 @@ def stop() -> None:
     print(f"Run '{current['name']}' stopped.")
 
 
-def run(name: str, live: bool = True, view: str = "together", **config) -> None:
+def command(run_config: str = "", **config) -> str:
+    """The `flwr run` command that `run()` executes, as you would type it in a terminal."""
+    rc = _merge(run_config, config)
+    return "flwr run app --stream" + (f' --run-config "{rc}"' if rc else "")
+
+
+def _merge(run_config: str, config: dict) -> str:
+    """One `--run-config` string: Flower syntax first, then keyword arguments."""
+    return " ".join(p for p in (run_config.strip(), _config_string(_flower_config(config))) if p)
+
+
+def run(name: str, run_config: str = "", *, view: str = "together", live: bool = True,
+        **config) -> None:
     """Launch a simulation in the background and follow its progress (live=True).
 
+    `run_config` is passed to `flwr run --run-config` unchanged, in Flower's syntax:
+    viz.run("dirichlet", "partitioning='dirichlet' dirichlet-alpha=0.1").
+    Keyword arguments are also accepted (partitioning="dirichlet", underscores for
+    hyphens) and appended to it. The command is printed before the run starts.
     The results appear in the dashboard; `view` picks the tab the link opens:
-    "together" (solo or together?), "run", "network" or "compare". Other keyword
-    arguments override the app configuration, e.g. partitioning="dirichlet".
+    "together" (solo or together?), "run", "network" or "compare".
     """
     os.environ.update(ENV)
     current = _STATE["current"]
@@ -189,12 +204,15 @@ def run(name: str, live: bool = True, view: str = "together", **config) -> None:
     result, log = _paths(name)
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     result.unlink(missing_ok=True)
-    flower = {**_flower_config(config), "results-file": str(result)}
-    cmd = [_flwr(), "run", str(APP_DIR), "--stream", "--run-config", _config_string(flower)]
+    rc = _merge(run_config, config)
+    print(command(rc))
+    # results-file feeds the dashboard; it is added here and kept out of the printed command.
+    full = " ".join(p for p in (rc, _config_string({"results-file": str(result)})) if p)
+    cmd = [_flwr(), "run", str(APP_DIR), "--stream", "--run-config", full]
     with open_file(log, "w") as out:
         proc = subprocess.Popen(cmd, cwd=APP_DIR, env=os.environ.copy(), stdout=out,
                                 stderr=subprocess.STDOUT)
-    _STATE["current"] = {"name": name, "proc": proc, "log": log, "config": config}
+    _STATE["current"] = {"name": name, "proc": proc, "log": log, "run_config": rc}
     if live:
         watch(name, view=view)
 

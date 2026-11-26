@@ -3,9 +3,10 @@
 
    1. Group picker   <div id="ws-group-picker"></div>  (hands-on/index.md)
                      Group + seat saved in the browser (localStorage).
-   2. Variables      __GROUP__, __SUPERLINK__, __SEAT__ anywhere in a page
-                     (prose or code blocks) are replaced by the participant's
-                     values. Groups come from groups.js.
+   2. Variables      __GROUP__, __SUPERLINK__, __SEAT__, __CLIENT__ anywhere in a
+                     page (prose or code blocks) are replaced by the participant's
+                     values. Groups come from groups.js. __CLIENT__ is the client
+                     (partition id) of the seat: seat - 1, as in the dashboard.
    3. Checklists     Markdown task lists become clickable and are remembered.
                      A page is "done" when every box in its .ws-checklist is
                      ticked; the stepper then shows a check mark.
@@ -47,8 +48,9 @@
     GROUP: () => (group() ? String(group().id) : null),
     SUPERLINK: () => (group() ? group().superlink : null),
     SEAT: () => seat(),
+    CLIENT: () => (seat() ? String(Number(seat()) - 1) : null),
   };
-  const SPLIT = /(__(?:GROUP|SUPERLINK|SEAT)__)/;
+  const SPLIT = /(__(?:GROUP|SUPERLINK|SEAT|CLIENT)__)/;
 
   function wrapVars(root) {
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {

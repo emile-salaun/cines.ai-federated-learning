@@ -7,6 +7,7 @@ ideally with the same number of CPUs as planned per participant:
     uv run --project app python scripts/calibrate.py --phase noniid                  # 2. IID / non-IID gap
     uv run --project app python scripts/calibrate.py --phase fedprox                 # 3. effect of FedProx
     uv run --project app python scripts/calibrate.py --phase participation           # 4. partial participation
+    uv run --project app python scripts/calibrate.py --phase commcomp                # 5. rounds x local epochs, same budget
     uv run --project app python scripts/calibrate.py --phase hparams --dataset fashion_mnist --rounds 5   # quick
     uv run --project app python scripts/calibrate.py --phase fedprox --local-epochs 5 --lr 0.01 --tag ep5  # variant
 
@@ -72,11 +73,26 @@ def grid_participation(a):
             yield f"{ds}_drop{drop}", {**base, "dropout-rate": drop}
 
 
+def grid_commcomp(a):
+    """Same compute budget (rounds x local epochs), fewer or more communication rounds."""
+    for ds in a.datasets:
+        lr, _ = pick_hparams(ds, a)
+        for part in a.commcomp_partitionings:
+            base = {"dataset": ds, "learning-rate": lr, "partitioning": part}
+            if part == "dirichlet":
+                base["dirichlet-alpha"] = a.participation_alpha
+            for rounds, ep in a.rounds_epochs:
+                yield f"{ds}_{part}_r{rounds}_ep{ep}", {
+                    **base, "num-server-rounds": rounds, "local-epochs": ep,
+                }
+
+
 GRIDS = {
     "hparams": grid_hparams,
     "noniid": grid_noniid,
     "fedprox": grid_fedprox,
     "participation": grid_participation,
+    "commcomp": grid_commcomp,
 }
 
 
@@ -135,9 +151,9 @@ def run_one(phase: str, name: str, cfg: dict, a) -> dict | None:
         return json.loads(result_file.read_text())
 
     full = {
-        **cfg,
-        "num-server-rounds": a.rounds,
+        "num-server-rounds": a.rounds,     # a grid may override the number of rounds
         "batch-size": a.batch_size,
+        **cfg,
         "results-file": str(result_file),
     }
     if a.data_dir:
@@ -276,6 +292,10 @@ def floats(s):
     return [float(x) for x in s.split(",")]
 
 
+def pairs(s):
+    return [tuple(int(x) for x in p.split("x")) for p in s.split(",")]
+
+
 def ints(s):
     return [int(x) for x in s.split(",")]
 
@@ -305,6 +325,11 @@ def main() -> None:
     p.add_argument("--participation-alpha", type=float, default=0.1)
     p.add_argument("--fractions", type=floats, default=[1.0, 0.6, 0.4, 0.2])
     p.add_argument("--dropouts", type=floats, default=[0.2, 0.5])
+    # phase commcomp
+    p.add_argument("--rounds-epochs", type=pairs, default=[(20, 1), (10, 2), (5, 4), (2, 10)],
+                   help="rounds x local epochs pairs, e.g. 20x1,10x2,5x4")
+    p.add_argument("--commcomp-partitionings", type=lambda s: s.split(","),
+                   default=["iid", "dirichlet"])
     p.add_argument("--report-only", action="store_true", help="run nothing, print the report again")
     p.add_argument("--tag", default="", help="separate subfolder: results/calibration/<phase>-<tag>")
     a = p.parse_args()

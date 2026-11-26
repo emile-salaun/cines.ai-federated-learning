@@ -1,0 +1,9 @@
+run,dataset,partitioning,alpha,lr,epochs,mu,frac,drop,failed,rounds,acc_r1,acc_r5,acc_final,acc_best,sec_per_round,warmup_s,total_s
+fashion_mnist_dirichlet_r10_ep2,fashion_mnist,dirichlet,0.1,0.01,2,0.0,1.0,0.0,0,10,0.6747,0.8137,0.8454,0.8454,6.7,20.3,83.5
+fashion_mnist_dirichlet_r20_ep1,fashion_mnist,dirichlet,0.1,0.01,1,0.0,1.0,0.0,0,20,0.6466,0.7811,0.8521,0.8521,3.8,16.6,93.5
+fashion_mnist_dirichlet_r2_ep10,fashion_mnist,dirichlet,0.1,0.01,10,0.0,1.0,0.0,0,2,0.7549,0.796,0.796,0.796,26.8,40.7,69.9
+fashion_mnist_dirichlet_r5_ep4,fashion_mnist,dirichlet,0.1,0.01,4,0.0,1.0,0.0,0,5,0.6892,0.8361,0.8361,0.8361,12.6,26.3,78.0
+fashion_mnist_iid_r10_ep2,fashion_mnist,iid,,0.01,2,0.0,1.0,0.0,0,10,0.7909,0.8706,0.8925,0.8925,5.1,17.3,65.9
+fashion_mnist_iid_r20_ep1,fashion_mnist,iid,,0.01,1,0.0,1.0,0.0,0,20,0.7306,0.8434,0.8914,0.8929,3.1,17.3,80.7
+fashion_mnist_iid_r2_ep10,fashion_mnist,iid,,0.01,10,0.0,1.0,0.0,0,2,0.8614,0.887,0.887,0.887,19.9,30.1,52.4
+fashion_mnist_iid_r5_ep4,fashion_mnist,iid,,0.01,4,0.0,1.0,0.0,0,5,0.8222,0.8891,0.8891,0.8891,8.4,21.0,56.8

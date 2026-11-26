@@ -28,10 +28,12 @@ nav = [
   { "Demo" = "demo.md" },
   { "Hands-on" = [
     "hands-on/index.md",
-    { "1. Group deployment" = "hands-on/01-deployment.md" },
-    { "2. Experiments" = "hands-on/02-experiments.md" },
-    { "3. Debrief" = "hands-on/03-debrief.md" },
-    { "Fallback: local simulation" = "hands-on/fallback-simulation.md" },
+    { "0. Setup" = "hands-on/00-setup.md" },
+    { "1. First run" = "hands-on/01-first-run.md" },
+    { "2. Heterogeneity" = "hands-on/02-heterogeneity.md" },
+    { "3. Compute vs communication" = "hands-on/03-compute-vs-communication.md" },
+    { "4. Failures" = "hands-on/04-failures.md" },
+    { "5. Debrief" = "hands-on/05-debrief.md" },
   ] },
   { "Resources" = "resources.md" },
 ]

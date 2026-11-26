@@ -19,6 +19,8 @@
   --ws-hero-bg: linear-gradient(135deg, #142824 0%, #1f3d37 55%, #2f5a51 100%);
   --ws-card-border: #e1e7e5;
   --ws-muted: #5d6b67;
+  --ws-frame-bg: #e6f0ec;          /* light mode: header and tabs */
+  --ws-card-bg: #f7faf9;           /* light mode: cards */
   --ws-map-land: #e9efed;
   --ws-map-border: #b8c8c2;
   --ws-map-site: var(--cines-green);
@@ -41,25 +43,39 @@
   --ws-map-packet: #6cc3a9;
 }
 
-/* --- Header: white with green logo (light), green with white logo (dark) ---- */
+/* --- Header: light green with green logo (light), green with white logo (dark) */
 [data-md-color-scheme="default"] .md-header,
 [data-md-color-scheme="default"] .md-tabs {
   --md-primary-bg-color: var(--cines-green);
   --md-primary-bg-color--light: rgba(31, 61, 55, 0.6);
-  background-color: #fff;
+  background-color: var(--ws-frame-bg);
   color: var(--cines-green);
 }
 
 [data-md-color-scheme="default"] .md-tabs {
-  border-bottom: 1px solid var(--ws-card-border);
+  border-bottom: 1px solid #d3e2dc;
 }
 
+/* Search box in the header (.md-search__button in Zensical) */
+[data-md-color-scheme="default"] .md-search__button,
 [data-md-color-scheme="default"] .md-search__input {
-  background-color: #eef2f1;
+  background-color: #fff;
+  box-shadow: inset 0 0 0 1px #d3e2dc;
 }
 
+[data-md-color-scheme="default"] .md-search__button:hover,
 [data-md-color-scheme="default"] .md-search__input:hover {
-  background-color: #e4eae8;
+  background-color: #f4f8f6;
+}
+
+/* Footer in CINES green (light mode; dark mode keeps the theme footer) */
+[data-md-color-scheme="default"] .md-footer,
+[data-md-color-scheme="default"] .md-footer-meta {
+  background-color: var(--cines-green);
+}
+
+[data-md-color-scheme="default"] .md-footer-meta {
+  background-color: var(--cines-green-dark);
 }
 
 [data-md-color-scheme="slate"] .md-header__button.md-logo img {
@@ -71,9 +87,42 @@
   font-weight: 600;
 }
 
+/* --- Left sidebar: list every page, not only the current tab ----------------
+   With navigation.tabs, the theme "lifts" the sidebar to the active tab only.
+   Keep the tabs on top and show the whole site in the sidebar (desktop). */
+@media screen and (min-width: 76.25em) {
+  .md-nav--primary.md-nav--lifted > .md-nav__list > .md-nav__item {
+    display: block;
+  }
+  .md-nav--primary.md-nav--lifted > .md-nav__list > .md-nav__item--active > .md-nav__link {
+    margin-top: 0.625em;
+  }
+  .md-nav--primary.md-nav--lifted > .md-nav__list > .md-nav__item--nested > .md-nav__link .md-nav__icon {
+    display: none;                 /* sections are always open: no chevron */
+  }
+  .md-nav--primary.md-nav--lifted > .md-nav__list > .md-nav__item--nested > .md-nav {
+    margin: 0.2em 0 0 0.3em;
+    padding-left: 0.6em;
+    border-left: 1px solid var(--ws-card-border);
+  }
+}
+
 /* --- Layout proportions ------------------------------------------------------ */
+/* Site width in rem, so it grows with Zensical's root font on wide screens
+   (20px up to 1599px, 22px from 1600px, 24px from 2000px):
+   70rem = 1400px on a laptop, 1540px on a 1920px screen or projector. */
 .md-grid {
-  max-width: 1180px;
+  max-width: 70rem;
+}
+
+/* Readable line length: running text stops at about 90 characters, even on
+   pages without sidebars (home, hands-on). Code, tables, cards, admonitions
+   and figures keep the full width. */
+.md-content .md-typeset > p,
+.md-content .md-typeset > ul,
+.md-content .md-typeset > ol,
+.md-content .md-typeset > dl {
+  max-width: 70ch;
 }
 
 .md-typeset {
@@ -161,6 +210,19 @@
   background: var(--md-accent-fg-color);
   border-color: var(--md-accent-fg-color);
   color: #fff;
+}
+
+/* Secondary buttons in dark mode: the primary green is too dark on slate. */
+[data-md-color-scheme="slate"] .md-typeset .md-button:not(.md-button--primary) {
+  color: var(--md-typeset-a-color);
+  border-color: var(--md-typeset-a-color);
+}
+[data-md-color-scheme="slate"] .md-typeset .md-button:not(.md-button--primary):hover {
+  color: #fff;
+}
+[data-md-color-scheme="slate"] .ws-hero .md-button:not(.md-button--primary) {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
 /* --- Home: hero animation (widgets.js, fl-round) ------------------------------ */
@@ -369,6 +431,11 @@
 }
 
 /* --- Cards ------------------------------------------------------------------- */
+[data-md-color-scheme="default"] .md-typeset .grid.cards > ul > li,
+[data-md-color-scheme="default"] .md-typeset .grid > .card {
+  background-color: var(--ws-card-bg);
+}
+
 .md-typeset .grid.cards > ul > li,
 .md-typeset .grid > .card {
   border: 1px solid var(--ws-card-border);
@@ -484,7 +551,7 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  counter-reset: ws-step;
+  counter-reset: ws-step -1;        /* steps are numbered from 0 (Setup) */
 }
 
 [dir] .md-typeset .ws-stepper > ul > li {
@@ -693,3 +760,109 @@
     margin-left: 0;
   }
 }
+
+/* --- Concepts: figures and formulas ------------------------------------------ */
+/* Figures are drawn on a light card so they stay readable in dark mode. */
+.md-typeset .ws-figure {
+  margin: 1.4em 0;
+  width: 100%;
+  max-width: 46rem;                /* figures stop growing on wide, sidebar-free pages */
+}
+.md-typeset .ws-figure img {
+  background: #ffffff;
+  border: 1px solid var(--ws-card-border);
+  border-radius: 0.6rem;
+  padding: 0.8rem;
+  width: 100%;
+  height: auto;
+}
+.md-typeset .ws-figure figcaption {
+  font-size: 0.7rem;
+  color: var(--ws-muted);
+  margin-top: 0.4em;
+}
+.md-typeset .ws-formula {
+  text-align: center;
+  font-family: "Cambria Math", "STIX Two Math", "Times New Roman", serif;
+  font-size: 1.15em;
+  margin: 1em 0;
+}
+
+/* Three compact cards in a row: add .ws-trio to a "grid cards" block.
+   Falls back to one column on phones. */
+.md-typeset .grid.cards.ws-trio {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.md-typeset .grid.cards.ws-trio > ul > li {
+  font-size: 0.75rem;
+}
+@media screen and (max-width: 44.9375em) {
+  .md-typeset .grid.cards.ws-trio {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- Concepts: inline SVG figures (includes/figures/*.svg) ------------------- */
+/* Drawn inline so they follow the light/dark toggle. Colours are tokens below. */
+:root,
+[data-md-color-scheme="default"] {
+  --wsf-ink: #1c2b28;
+  --wsf-muted: #5d6b67;
+  --wsf-panel: #f5f8f7;
+  --wsf-line: #dde6e2;
+  --wsf-node: #ffffff;
+  --wsf-node-line: #c3d3ce;
+  --wsf-strong: #1f3d37;
+  --wsf-on: #ffffff;
+  --wsf-accent: #2f8a72;
+  --wsf-accent-soft: #d8eee7;
+  --wsf-warn: #c0661a;
+  --wsf-warn-soft: #fbeadb;
+}
+[data-md-color-scheme="slate"] {
+  --wsf-ink: #e3ece9;
+  --wsf-muted: #9caca7;
+  --wsf-panel: #162120;
+  --wsf-line: #2a3936;
+  --wsf-node: #1c2a27;
+  --wsf-node-line: #3a514b;
+  --wsf-strong: #2d6a5b;
+  --wsf-on: #ffffff;
+  --wsf-accent: #6cc3a9;
+  --wsf-accent-soft: #1f3d37;
+  --wsf-warn: #e9a361;
+  --wsf-warn-soft: #3b2a1a;
+}
+.md-typeset .ws-figure .wsf {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+/* Panels side by side; one column only when the figure itself is narrow (phone).
+   Container queries, not media queries: the text column width does not follow
+   the window when zooming (Zensical grows the root font size on wide screens). */
+.md-typeset .ws-figure {
+  container-type: inline-size;
+}
+.md-typeset .ws-fig-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-items: center;
+  gap: 0.8rem;
+}
+.md-typeset .ws-fig-row--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@container (max-width: 520px) {
+  .md-typeset .ws-fig-row,
+  .md-typeset .ws-fig-row--3 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .md-typeset .ws-fig-row > .wsf {
+    max-width: 380px;
+  }
+  .md-typeset .ws-fig-row--3 > .wsf {
+    max-width: 300px;
+  }
+}
+/* The classes that use these tokens live in each SVG (scripts/concept_figures.py). */
