@@ -12,6 +12,9 @@
                      ticked; the stepper then shows a check mark.
    4. Stepper        .ws-stepper (includes/hands-on-stepper.md): highlights the
                      current step, marks done steps, shows the group chip.
+
+   Scenario (zensical.toml, [project.extra] scenario, read from the page head):
+   the group chip only shows in scenario "A"; in "B" the pages carry no picker.
    ============================================================================= */
 (() => {
   "use strict";
@@ -38,6 +41,8 @@
   };
 
   const GROUPS = Array.isArray(window.WS_GROUPS) ? window.WS_GROUPS : [];
+  const SCENARIO =
+    (document.querySelector('meta[name="ws-scenario"]') || {}).content || "B";
   const normPath = (p) => p.replace(/index\.html$/, "").replace(/\/?$/, "/");
   const here = () => normPath(location.pathname);
   const group = () => GROUPS.find((g) => String(g.id) === store.get("group"));
@@ -179,6 +184,7 @@
       });
 
       let chip = nav.querySelector(".ws-group-chip");
+      if (SCENARIO !== "A") return;
       if (!chip && links.length) {
         chip = document.createElement("a");
         chip.className = "ws-group-chip";

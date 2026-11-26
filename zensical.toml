@@ -38,8 +38,19 @@ nav = [
   { "Resources" = "resources.md" },
 ]
 
+# Hands-on scenario, the one switch between the two workshop formats:
+#   "B"  phase 1 simulation in each notebook, then one room federation (default)
+#   "A"  group federations: shows the group and seat picker, "Groups of 3–6" and
+#        the architecture section on the hands-on overview
+# Markdown pages read it as {{ scenario }}; hands-on.js reads it from the page head
+# (overrides/main.html). Markdown is rendered with Jinja: in a page, write {{, {%
+# and {# only as template syntax.
+[project.extra]
+scenario = "B"
+
 [project.theme]
 variant = "classic"                  # required: extra.css targets the classic layout
+custom_dir = "overrides"             # adds the scenario to the page head
 language = "en"
 logo = "assets/images/cines-mark.svg"
 favicon = "assets/images/cines-favicon.svg"
@@ -78,6 +89,7 @@ toggle.icon = "material/weather-sunny"
 toggle.name = "Light mode"
 
 [project.markdown_extensions]
+"zensical.extensions.markdownextradata" = {}   # {{ scenario }} and {% if %} in pages
 abbr = {}                            # glossary tooltips: includes/abbreviations.md
 admonition = {}
 attr_list = {}

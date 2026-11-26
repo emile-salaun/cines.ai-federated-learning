@@ -69,8 +69,8 @@ alone ("solo") and with one model trained on all the data ("centralised").
 !!! checkpoint "You should see"
 
     Three curves (solo, together, centralised) and the table *What each model can
-    recognise*. In *Each client's data*, find **client `__CLIENT__`**: which two classes
-    does it hold?
+    recognise*. In *Each client's data*, {% if scenario == "A" %}find **client `__CLIENT__`**{% else %}pick one client{% endif %}:
+    which two classes does it hold?
 
 ## 1.4 The run lives on the SuperLink
 

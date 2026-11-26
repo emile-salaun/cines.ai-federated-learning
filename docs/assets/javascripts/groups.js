@@ -6,6 +6,9 @@
    - size  number of seats in the group (seat picker 1..size, __SEAT__; the
            participant's client in the dashboard is seat - 1, __CLIENT__)
 
+   Used in scenario "A" only (zensical.toml, [project.extra] scenario): the
+   picker on the hands-on overview. In scenario "B" this list is not shown.
+
    Phase 2 uses one room SuperLink, run by the trainers: its address goes on the
    room federation page, not here.
    ============================================================================= */

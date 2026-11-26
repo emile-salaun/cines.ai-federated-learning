@@ -8,7 +8,9 @@ hide:
 
 <div class="ws-meta" markdown="span">
   <span class="ws-badge">:material-clock-outline: 60 min</span>
+{% if scenario == "A" %}
   <span class="ws-badge">:material-account-group-outline: Groups of 3–6</span>
+{% endif %}
   <span class="ws-badge">:material-flower-outline: Flower</span>
 </div>
 
@@ -18,7 +20,11 @@ You learn federated learning in two phases. **Phase 1**: everyone simulates a sm
 federation in their own notebook and puts it under stress (unequal data, slow clients,
 costly communication). **Phase 2**: the whole room joins one real federation, and the
 server measures what each participant brings. In each step you predict, run, check
-in the dashboard and discuss with your group.
+in the dashboard and discuss with {% if scenario == "A" %}your group{% else %}your neighbours{% endif %}.
+
+<!-- Scenario switch: [project.extra] scenario in zensical.toml ("A" shows the
+     group and seat picker and the architecture section) -->
+{% if scenario == "A" %}
 
 ## Your seat { #your-group }
 
@@ -47,6 +53,8 @@ flowchart LR
         N3["SuperNode<br/>seat …"] --> SL
     end
 ```
+
+{% endif %}
 
 ## Steps
 

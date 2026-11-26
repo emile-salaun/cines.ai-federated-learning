@@ -54,6 +54,12 @@ zensical build --clean --strict      # what CI runs
 `docs/assets/javascripts/groups.js` holds the groups and SuperLink addresses: fill it in
 on the day only, not in a committed change with real hosts.
 
+`[project.extra] scenario` in `zensical.toml` switches the hands-on pages between the two
+formats: `"B"` (simulation, then one room federation) or `"A"` (group federations, with
+the group and seat picker and the architecture section). Pages test it with
+`{% if scenario == "A" %}`, so write `{{`, `{%` and `{#` in Markdown only as template
+syntax.
+
 ## Slides
 
 The CI renders `slides/talk.md` with Marp CLI 4.5.1 into `site/slides/index.html` and

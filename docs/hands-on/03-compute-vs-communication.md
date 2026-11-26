@@ -30,26 +30,35 @@ step 2. Before running, write down in your group:
 - whether the accuracy drops, on IID data and on Dirichlet data;
 - on which data it drops more, and why.
 
+{% if scenario == "A" %}
 ## 3.2 Split the runs in your group
 
-Each seat runs one line (in the notebook, each seat has its own cell), then shares its
-numbers. Time left? Run another one.
+Each seat runs one line (in the notebook, each run has its own cell), then shares its
+numbers: seat 1 takes run 1, seat 2 run 2, seat 3 run 3, seats 4 and more run 4.
+Time left? Run another one.
+{% else %}
+## 3.2 Split the runs with your neighbours
 
-| Seat | Data | Rounds × local epochs |
+Each of you runs one line (in the notebook, each run has its own cell), so that the
+four runs are covered between you, then share your numbers. Alone? Start with runs 3
+and 4. Time left? Run another one.
+{% endif %}
+
+| Run | Data | Rounds × local epochs |
 |:---:|:---:|:---:|
 | 1 | Dirichlet | 20 × 1 |
 | 2 | Dirichlet | 5 × 4 |
 | 3 | Dirichlet | 2 × 10 |
-| 4 and more | IID | 2 × 10 |
+| 4 | IID | 2 × 10 |
 
 ```python
-# Seat 1
+# Run 1
 !flwr run app --stream --run-config "run-name='dirichlet_r20_ep1' partitioning='dirichlet' dirichlet-alpha=0.1 num-server-rounds=20 local-epochs=1"
-# Seat 2
+# Run 2
 !flwr run app --stream --run-config "run-name='dirichlet_r5_ep4' partitioning='dirichlet' dirichlet-alpha=0.1 num-server-rounds=5 local-epochs=4"
-# Seat 3
+# Run 3
 !flwr run app --stream --run-config "run-name='dirichlet_r2_ep10' partitioning='dirichlet' dirichlet-alpha=0.1 num-server-rounds=2 local-epochs=10"
-# Seat 4 and more
+# Run 4
 !flwr run app --stream --run-config "run-name='iid_r2_ep10' partitioning='iid' num-server-rounds=2 local-epochs=10"
 ```
 

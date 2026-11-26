@@ -19,11 +19,14 @@ hide:
     The phase 1 notebook is open, a simulated federation of five clients is ready, and
     the dashboard is open in a tab next to the notebook.
 
+{% if scenario == "A" %}
 !!! info "Your seat"
 
     Group `__GROUP__` · Seat `__SEAT__` · Your client: **`__CLIENT__`** (clients are
     numbered from 0 in the dashboard). Wrong values? Change them on the
-    [overview page](index.md#your-group).
+    [overview page](index.md).
+
+{% endif %}
 
 ## 0.1 Open the notebook
 

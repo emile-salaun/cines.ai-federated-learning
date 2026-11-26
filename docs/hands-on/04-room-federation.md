@@ -28,7 +28,7 @@ hide:
 
 ## 4.1 Join the federation
 
-TBD (`notebooks/join.ipynb`: starts your SuperNode on seat `__SEAT__`).
+TBD (`notebooks/join.ipynb`: starts your SuperNode on {% if scenario == "A" %}seat `__SEAT__`{% else %}your seat{% endif %}).
 
 !!! checkpoint "You should see"
 

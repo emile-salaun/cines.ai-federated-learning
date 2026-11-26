@@ -60,7 +60,7 @@ viz.dashboard("dirichlet", view="network")
 2. Timeline of `dirichlet`: why does everyone wait for the same client? Where have you
    seen this pattern on a cluster?
 3. **The run** tab, *Client drift*: which client moves furthest from the global model?
-   What is special about its data? How much data does client `__CLIENT__` hold?
+   What is special about its data? How much data does {% if scenario == "A" %}client `__CLIENT__`{% else %}it{% endif %} hold?
 
 ## Done?
 

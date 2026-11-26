@@ -1,0 +1,9 @@
+{#-
+  overrides/main.html - Theme override: puts the hands-on scenario
+  ([project.extra] scenario in zensical.toml) in the page head for hands-on.js.
+-#}
+{% extends "base.html" %}
+
+{% block extrahead %}
+  <meta name="ws-scenario" content="{{ config.extra.scenario }}">
+{% endblock %}
