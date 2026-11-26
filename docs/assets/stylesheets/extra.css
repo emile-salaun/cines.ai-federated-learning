@@ -707,7 +707,7 @@
   margin-top: 0.4rem;
 }
 
-/* --- Hands-on: injected variables (__SUPERLINK__, ...) ------------------------ */
+/* --- Hands-on: injected variables (__GROUP__, __SEAT__, __CLIENT__) ---------- */
 .ws-var {
   border-bottom: 1px dashed var(--md-accent-fg-color);
 }

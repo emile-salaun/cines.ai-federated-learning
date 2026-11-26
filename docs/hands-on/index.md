@@ -20,10 +20,12 @@ costly communication). **Phase 2**: the whole room joins one real federation, an
 server measures what each participant brings. In each step you predict, run, check
 in the dashboard and discuss with your group.
 
-## Your group { #your-group }
+## Your seat { #your-group }
 
-<!-- Groups and SuperLink addresses: docs/assets/javascripts/groups.js -->
-Pick your group and seat. The commands on the next pages will use your values.
+<!-- Groups and seats: docs/assets/javascripts/groups.js -->
+Pick your group and seat. Your group predicts and discusses together; your seat gives
+your client number in the dashboard and your run in step 3. The next pages use these
+values.
 
 <div id="ws-group-picker" class="ws-picker">
   <p class="ws-muted">Loading… (requires JavaScript)</p>
