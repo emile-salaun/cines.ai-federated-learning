@@ -171,8 +171,8 @@ accuracy. The 2-epoch row comes from step 2.
 
 !!! tip "Keep this in mind for phase 2"
 
-    In the room federation, you pick your own local epochs, and the deadline is real.
-    Your answer to question 3 is your strategy.
+    In the room federation, you pick your own local epochs, and the same rule decides
+    who counts, with a shorter deadline. Your answer to question 3 is your strategy.
 
 ## Done?
 

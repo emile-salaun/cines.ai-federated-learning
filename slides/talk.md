@@ -199,16 +199,16 @@ The exercises use **α = 0.1**.
 <div class="stage">
 <div class="grid-2">
 <div class="tile "><span class="tag">Hands-on</span><h3>Flower: build and learn</h3><p>The same app runs in a notebook or across machines. Each experiment is one <code style="white-space: nowrap">--run-config</code> change.</p></div>
-<div class="tile dark"><span class="tag">Demo</span><h3>NVIDIA FLARE: operate across sites</h3><p>Per-site certificates, Slurm launcher, clients that only connect out. Used by Bristol to federate three UK supercomputers.</p></div>
+<div class="tile dark"><span class="tag">Demo</span><h3>NVIDIA FLARE: operate across sites</h3><p>Per-site certificates, Slurm launcher, clients that only connect out. Already federates Isambard&#8209;AI, Jean Zay and Adastra.</p></div>
 </div>
 <div class="takeaway">The two mature FL frameworks in 2026, and compatible: FLARE can run Flower apps.</div>
-<span class="tiny">Sources: arXiv 2611.10688 · arXiv 2611.30381 · nvflare.readthedocs.io</span>
+<span class="tiny">Sources: arXiv 2611.10688 · bristol.ac.uk (BriCS–GENCI, 2026) · nvflare.readthedocs.io</span>
 </div>
 
 <!--
 Speaker notes
 - Fit, not capability: Flower can also run on HPC (SuperNodes as Slurm jobs, TLS, node authentication).
-- Bristol (Wright et al., SC26 Workshops) ran unmodified Flower apps inside NVIDIA FLARE across Isambard-AI, Isambard 3 and Zenith. Each site's long-running client stays inside that site, hosted on Kubernetes.
+- ConcordAI (BriCS and GENCI, with IDRIS and CINES) uses NVIDIA FLARE between Isambard-AI, Jean Zay and Adastra.
 -->
 
 ---
@@ -286,7 +286,7 @@ Speaker notes
 <div class="stage">
 <div class="grid-3">
 <div class="tile "><span class="tag">You pick</span><h3>Local epochs</h3><p>1, 2, 5 or 10, in <code>room.join(epochs=…)</code>. More work per round, or on time?</p></div>
-<div class="tile "><span class="tag">The server sets</span><h3>A round deadline</h3><p>An update that arrives late is dropped for that round. Nobody waits for the slowest.</p></div>
+<div class="tile "><span class="tag">The server sets</span><h3>A round deadline</h3><p>As in step 3: 5,000 images per simulated second. Over the deadline, your update is left out of that round.</p></div>
 <div class="tile dark"><span class="tag">The server measures</span><h3>Your impact</h3><p>Accuracy points the room model loses without your update, on images no client holds.</p></div>
 </div>
 </div>
@@ -317,9 +317,9 @@ Speaker notes
 Speaker notes
 - 0:00-3:00 everyone joins; check the SuperNode count with `flwr supernode ls room`.
 - Start the run (trainers' terminal, values from the runbook):
-  flwr run app room --stream --run-config "run-name='room' partitioning='pathological' num-partitions=<seats> round-timeout=<s> num-server-rounds=<n> fraction-evaluate=0.0"
+  flwr run app room --stream --run-config "run-name='room' partitioning='pathological' num-partitions=<seats> sim-deadline=2.0 round-timeout=30 num-server-rounds=30 fraction-evaluate=0.0"
 - Projector: dashboard, Room tab.
-- Halfway (about 7:30): odd seats run room.leave(); 2 rounds later, they rejoin.
+- Announce the deadline (2 simulated s). Round 15: odd seats run room.leave(); round 20: they rejoin.
 - Last 3 minutes: read the leaderboard; impact = accuracy points lost without your update.
 -->
 

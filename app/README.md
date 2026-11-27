@@ -83,11 +83,13 @@ uv run flower-superlink --insecure --disable-runtime-dependency-installation --p
 # Each participant (what notebooks/join.ipynb runs through flworkshop.room.join)
 uv run flower-supernode --insecure --superlink 127.0.0.1:9092 --port 9107 --node-config "seat=7 local-epochs=2"
 # Trainers: the run, on the `room` connection of ~/.flwr/config.toml
-uv run flwr run app room --stream --run-config "run-name='room' partitioning='pathological' num-partitions=25 round-timeout=25 fraction-evaluate=0.0"
+uv run flwr run app room --stream --run-config "run-name='room' partitioning='pathological' num-partitions=25 sim-deadline=2.0 round-timeout=30 num-server-rounds=30 fraction-evaluate=0.0"
 ```
 
-Each round, the server waits `round-timeout` seconds (`strategy.start(timeout=...)`);
-a sampled SuperNode that has not answered is "late" and its update is left out. A
+The room run uses the simulated deadline (`sim-deadline`, as in step 3): a SuperNode
+whose simulated training time is over it answers "late" and is left out. Each round,
+the server also stops waiting after `round-timeout` seconds
+(`strategy.start(timeout=...)`): a SuperNode that has not answered is "late" too; a
 reply that arrives later is still pulled, only to record the delay. The ServerApp also
 measures each on-time client's impact (leave-one-out: accuracy of the average with and
 without its update, on a 2,000-image test subset) and writes a leaderboard into the
@@ -178,7 +180,8 @@ login node, for example `srun -c 8 --time 02:00:00 uv run python scripts/calibra
   and `FLWR_LOCAL_CONTROL_API_PORT` per user (see `infra/README.md`).
 - **One ClientApp process per message in deployed mode.** Each round, every SuperNode
   starts a fresh `flwr-clientapp` process (imports, data loading): about 5 s before
-  training starts. Keep the round deadline at 20 s or more.
+  training starts. A wall-clock deadline (`round-timeout`) under 20 s marks everyone
+  late; the room run therefore uses `sim-deadline`, with `round-timeout` as a safety net.
 - **Data path.** The app runs from an installed copy in `~/.flwr/apps/`, not from this
   folder: a relative path such as `data/` would not work. Hence an absolute default
   folder (`~/.cache/fl-workshop`).

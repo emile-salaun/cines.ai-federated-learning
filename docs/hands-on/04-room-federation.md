@@ -32,8 +32,10 @@ flowchart LR
 
 Two rules for this run:
 
-- **Each round has a deadline.** An update that arrives after it does not count for
-  that round.
+- **Each round has a deadline**, the same rule as in step 3: every SuperNode "trains"
+  5,000 images per simulated second, and a SuperNode whose local training would take
+  longer than the deadline is left out of that round. The trainers give the deadline
+  at the start of the run.
 - **The server measures your impact**: how many accuracy points the room model loses
   when it leaves your update out. It measures this on images that no client holds.
   Nothing you declare is taken into account.
@@ -50,8 +52,8 @@ In the file browser of the hub, open `notebooks/join.ipynb` and run its first ce
 ## 4.2 Pick your local epochs and join
 
 Pick 1, 2, 5 or 10 local epochs: it is the only number you change. Think back to
-step 2: everyone waited for the slowest client. Here nobody waits: a late update is
-dropped.
+step 3: more local work per round, or making the deadline? With 25 seats, each share
+holds about 2,000 training images.
 
 ```python
 room.join(epochs=2)

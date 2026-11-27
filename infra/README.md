@@ -109,7 +109,7 @@ When the SuperNodes have joined (`flwr supernode ls room`), start the run. Set
 seats that never join are data nobody holds.
 
 ```bash
-flwr run app room --stream --run-config "run-name='room' partitioning='pathological' num-partitions=<seats> round-timeout=<s> num-server-rounds=<n> fraction-evaluate=0.0"
+flwr run app room --stream --run-config "run-name='room' partitioning='pathological' num-partitions=<seats> sim-deadline=2.0 round-timeout=30 num-server-rounds=30 fraction-evaluate=0.0"
 ```
 
 Projector: a trainer notebook with `viz.setup()`, then the **Room** tab of the
@@ -121,12 +121,12 @@ dashboard.
 |---|---|---|
 | `partitioning` | `'pathological'` (2 classes per seat) | Parts of similar size (1,925 to 3,206 images for 25 seats, against 78 to 6,799 with Dirichlet 0.1), so the epochs choice, not luck, decides who is late; impact then reflects rare classes |
 | `num-partitions` | Seats handed out | Same split whatever the headcount |
-| `round-timeout` | ≥ 20 s, to calibrate | Each round costs about 8 s per client before any training: one ClientApp process per message, plus the server's 3 s polling interval |
-| `num-server-rounds` | 9 min / round time | 3 min to join, 9 min of training, 3 min to read the leaderboard |
+| `sim-deadline` | `2.0`, to calibrate | Simulated deadline, the step 3 rule (decision 2026-11-27): 1 and 2 epochs always on time, 5 epochs on time for the smaller seats (17 of 25), 10 never. A wall-clock deadline would rank noise: 10 epochs take 1.4 s on a free core, against about 8 s of fixed cost per round (one ClientApp process per message, 3 s polling) |
+| `round-timeout` | `30` | Safety net only: a frozen or vanished SuperNode never blocks a round longer |
+| `num-server-rounds` | `30`, to calibrate | Rounds last about 10–15 s: 3 min to join, about 7 min of training, 3 min to read the leaderboard |
 | `fraction-evaluate` | `0.0` | The server evaluates the room model itself; no client evaluation to wait for |
 
-Calibrate `round-timeout` in the load test: with 2 epochs everyone should make the
-deadline, with 10 epochs nobody should.
+Calibrate in the load test: the round time (for `num-server-rounds`) with 25 SuperNodes.
 
 ## 6. Load test (before the January rehearsal)
 
