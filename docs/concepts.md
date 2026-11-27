@@ -193,8 +193,8 @@ The hands-on splits Fashion-MNIST over its clients in three ways:
     across machines, and each experiment is one `--run-config` change. That is the
     hands-on. **[NVIDIA FLARE](https://nvflare.readthedocs.io/)** is built to operate
     federations between institutions, with per-site certificates and a Slurm launcher,
-    and it already federates Isambard-AI, Jean Zay and Adastra
-    ([ConcordAI](https://www.bristol.ac.uk/research/centres/bristol-supercomputing/articles/2026/federated-learning-brics-genci.html)). That is the [demo](demo.md#hpc-context). The two are
+    and Bristol used it to federate three UK supercomputers
+    ([Wright et al., SC26 Workshops](https://arxiv.org/abs/2611.30381)). That is the [demo](demo.md#hpc-context). The two are
     compatible: FLARE can run Flower apps.
 
 ??? info "Learn more: Flower vs NVIDIA FLARE"

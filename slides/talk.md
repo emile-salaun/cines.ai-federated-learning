@@ -199,16 +199,16 @@ The exercises use **α = 0.1**.
 <div class="stage">
 <div class="grid-2">
 <div class="tile "><span class="tag">Hands-on</span><h3>Flower: build and learn</h3><p>The same app runs in a notebook or across machines. Each experiment is one <code style="white-space: nowrap">--run-config</code> change.</p></div>
-<div class="tile dark"><span class="tag">Demo</span><h3>NVIDIA FLARE: operate across sites</h3><p>Per-site certificates, Slurm launcher, clients that only connect out. Already federates Isambard&#8209;AI, Jean Zay and Adastra.</p></div>
+<div class="tile dark"><span class="tag">Demo</span><h3>NVIDIA FLARE: operate across sites</h3><p>Per-site certificates, Slurm launcher, clients that only connect out. Used by Bristol to federate three UK supercomputers.</p></div>
 </div>
 <div class="takeaway">The two mature FL frameworks in 2026, and compatible: FLARE can run Flower apps.</div>
-<span class="tiny">Sources: arXiv 2611.10688 · bristol.ac.uk (BriCS–GENCI, 2026) · nvflare.readthedocs.io</span>
+<span class="tiny">Sources: arXiv 2611.10688 · arXiv 2611.30381 · nvflare.readthedocs.io</span>
 </div>
 
 <!--
 Speaker notes
 - Fit, not capability: Flower can also run on HPC (SuperNodes as Slurm jobs, TLS, node authentication).
-- ConcordAI (BriCS and GENCI, with IDRIS and CINES) uses NVIDIA FLARE between Isambard-AI, Jean Zay and Adastra.
+- Bristol (Wright et al., SC26 Workshops) ran unmodified Flower apps inside NVIDIA FLARE across Isambard-AI, Isambard 3 and Zenith. Each site's long-running client stays inside that site, hosted on Kubernetes.
 -->
 
 ---

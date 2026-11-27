@@ -32,8 +32,9 @@ Silos on HPC meet constraints the cloud does not have:
 **Why NVIDIA FLARE here.** It answers each constraint: its
 [Slurm launcher](https://nvflare.readthedocs.io/en/main/user_guide/admin_guide/deployment/slurm_job_launcher.html) (version 2.9) submits client jobs
 to the batch queue, clients only connect out to the server, and provisioning gives every
-site its own startup kit and certificates. It is also what ConcordAI uses to federate
-Isambard-AI, Jean Zay and Adastra ([BriCS–GENCI, 2026](https://www.bristol.ac.uk/research/centres/bristol-supercomputing/articles/2026/federated-learning-brics-genci.html)).
+site its own startup kit and certificates. The University of Bristol used it to federate
+three UK supercomputers (Isambard-AI, Isambard 3 and Zenith), running unmodified Flower
+apps inside FLARE ([Wright et al., SC26 Workshops](https://arxiv.org/abs/2611.30381)).
 The hands-on uses Flower instead: see [why](concepts.md#frameworks).
 
 ??? info "Learn more: FL on HPC in 2026"
