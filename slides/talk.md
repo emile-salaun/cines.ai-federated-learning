@@ -245,9 +245,9 @@ Speaker notes
 <div class="countdown" data-minutes="15" title="Click: pause / resume · Double-click: reset">15:00</div>
 
 <div class="break-steps">
-<div><b>1</b> Find your group <span>4–5 people, see the site</span></div>
-<div><b>2</b> Group lead <span>opens <code>lead.ipynb</code></span></div>
-<div><b>3</b> Members <span>open <code>member.ipynb</code></span></div>
+<div><b>1</b> Log in to the hub <span>address and account on your card</span></div>
+<div><b>2</b> Open <code>simulation.ipynb</code> <span>in <code>notebooks/</code></span></div>
+<div><b>3</b> Run <code>viz.setup()</code> <span>then open the dashboard</span></div>
 </div>
 
 
@@ -269,12 +269,33 @@ Speaker notes (after the demo)
 
 <div class="stage">
 <div class="countdown" data-minutes="35" title="Click: pause / resume · Double-click: reset">35:00</div>
-<ul><li>Steps 0 to 3 in <strong>your own</strong> notebook</li><li><strong>Predict</strong> with your group before every run</li><li><strong>Done when</strong> your group table of step 3 is filled in</li></ul>
+<ul><li>Steps 0 to 3 in <strong>your own</strong> notebook</li><li><strong>Predict</strong> with your neighbours before every run</li><li><strong>Done when</strong> your step 3 table is filled in</li></ul>
 </div>
 
 <!--
 Speaker notes
 - Setup 5 min, then about 10 min per step. At 0:00 everyone moves to phase 2, finished or not.
+-->
+
+---
+
+<span class="kicker">Hands-on · phase 2</span>
+
+## One federation, the whole room
+
+<div class="stage">
+<div class="grid-3">
+<div class="tile "><span class="tag">You pick</span><h3>Local epochs</h3><p>1, 2, 5 or 10, in <code>room.join(epochs=…)</code>. More work per round, or on time?</p></div>
+<div class="tile "><span class="tag">The server sets</span><h3>A round deadline</h3><p>An update that arrives late is dropped for that round. Nobody waits for the slowest.</p></div>
+<div class="tile dark"><span class="tag">The server measures</span><h3>Your impact</h3><p>Accuracy points the room model loses without your update, on images no client holds.</p></div>
+</div>
+</div>
+
+<!--
+Speaker notes
+- 1 minute, just before the phase 2 timer.
+- Nothing is declared by the clients: the leaderboard comes from the server's own measurements.
+- Halfway, half the room will be asked to leave and rejoin: real disconnections.
 -->
 
 ---
@@ -289,13 +310,17 @@ Speaker notes
 
 <div class="stage">
 <div class="countdown" data-minutes="15" title="Click: pause / resume · Double-click: reset">15:00</div>
-<ul><li>Start <strong>your</strong> SuperNode: one real client per seat</li><li>Pick your local epochs: the round has a deadline</li><li><strong>Done when</strong> your seat is on the leaderboard</li></ul>
+<ul><li>Open <code>join.ipynb</code>, run <code>room.join(epochs=…)</code>: one real SuperNode per seat</li><li>Late updates are dropped; the server measures your <strong>impact</strong></li><li><strong>Done when</strong> your seat is on the leaderboard</li></ul>
 </div>
 
 <!--
 Speaker notes
-- Join notebook, deadline and leaderboard: to finalise after the phase 2 prototype.
-- Halfway: ask half the room to stop their SuperNode, then to rejoin.
+- 0:00-3:00 everyone joins; check the SuperNode count with `flwr supernode ls room`.
+- Start the run (trainers' terminal, values from the runbook):
+  flwr run app room --stream --run-config "run-name='room' partitioning='pathological' num-partitions=<seats> round-timeout=<s> num-server-rounds=<n> fraction-evaluate=0.0"
+- Projector: dashboard, Room tab.
+- Halfway (about 7:30): odd seats run room.leave(); 2 rounds later, they rejoin.
+- Last 3 minutes: read the leaderboard; impact = accuracy points lost without your update.
 -->
 
 ---

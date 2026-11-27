@@ -95,8 +95,8 @@ results folder and follows the latest run, round by round.
 
 !!! checkpoint "You should see"
 
-    Four tabs: **Solo or together?**, **The run**, **Network**, **Compare**. They stay
-    empty until the first run.
+    Five tabs: **Solo or together?**, **The run**, **Network**, **Compare**, **Room**.
+    They stay empty until the first run; **Room** is for phase 2.
 
 ## Done?
 

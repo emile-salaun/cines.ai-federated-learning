@@ -61,6 +61,7 @@ jobs:
       - name: Build site (scenario A, at /scenario-a/)
         run: |
           sed -e 's/^scenario = "[AB]"/scenario = "A"/' \
+              -e 's/"3. Beat the deadline"/"3. Compute vs communication"/' \
               -e 's|^site_url = "\(.*\)/"|site_url = "\1/scenario-a/"|' \
               -e '/^\[project\]$/a site_dir = "site-scenario-a"' \
               zensical.toml > zensical.scenario-a.toml

@@ -19,12 +19,12 @@ material is built and maintained.
 | Path | Content |
 |---|---|
 | `app/` | Flower app, a uv project (`pyproject.toml`, `uv.lock`, `LICENSE` copy required by Flower, `flworkshop/`). Details: [`app/README.md`](app/README.md) |
-| `notebooks/` | `simulation.ipynb` (hands-on phase 1); `join.ipynb` (phase 2, room federation) to come |
+| `notebooks/` | `simulation.ipynb` (hands-on phase 1); `join.ipynb` (phase 2, room federation: one SuperNode per participant) |
 | `dashboard/` | Web dashboard served by `flworkshop/dashboard_server.py` |
 | `scripts/` | `prepare_data.py`, `show_partitions.py`, `calibrate.py`, `compute_baselines.py`, `compute_baselines.slurm` |
 | `references/` | `calibration/` results; solo/centralised baselines to come |
 | `demo-nvflare/` | Description of the NVIDIA FLARE demo across two HPC centres; the demo code lives in a separate private repository |
-| `infra/` | JupyterHub (TLJH) setup (to come) |
+| `infra/` | JupyterHub (TLJH) setup: sizing, ports, install plan, room SuperLink |
 | `slides/` | Talk slides (Marp: `talk.md`, `themes/cines.css`, `widgets.js`, `images/`) |
 | `docs/`, `includes/`, `zensical.toml` | Workshop site (Zensical, classic variant) |
 | `.github/workflows/docs.yml` | Builds the site and the slides, deploys GitHub Pages |
@@ -64,7 +64,8 @@ The deploy publishes both scenarios: the `zensical.toml` value (B) at the site r
 an A build at `/scenario-a/`, linked from nowhere. To run the hands-on in A, share
 `https://emile-salaun.github.io/cines.ai-federated-learning/scenario-a/`; no rebuild is
 needed. Both builds run with `--strict`, so A-only blocks are checked on every push.
-Local preview of A: change `scenario` to `"A"` and run `zensical serve`.
+Local preview of A: change `scenario` to `"A"` and run `zensical serve`. The nav
+label of step 3 differs between the two (`docs.yml` renames it in the A build).
 
 ## Slides
 

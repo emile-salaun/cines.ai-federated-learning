@@ -90,6 +90,7 @@ function describeConfig(cfg) {
   if (+cfg["fraction-train"] < 1) parts.push(`${pct(+cfg["fraction-train"])} of clients per round`);
   if (+cfg["dropout-rate"] > 0) parts.push(`${pct(+cfg["dropout-rate"])} dropouts`);
   if (+cfg["proximal-mu"] > 0) parts.push(`FedProx μ = ${cfg["proximal-mu"]}`);
+  if (+cfg["round-timeout"] > 0) parts.push(`${cfg["round-timeout"]}${NNBSP}s round deadline`);
   return parts.join(", ");
 }
 
@@ -315,7 +316,7 @@ function renderRun(D) {
         <p class="sub">Each client, right after its local training and before averaging, evaluated on the test set. A line breaks when the client did not take part.</p>
         <div id="c-run"></div></section>
       <section class="panel"><h2>Participation per round</h2>
-        <p class="sub">Local model accuracy (%). "–": not sampled. "×": disconnected.</p>
+        <p class="sub">Local model accuracy (%). "–": not sampled. "×": disconnected. "late": missed the round deadline.</p>
         <div id="p-run" style="overflow-x:auto"></div></section>
     </div>
     <div class="grid2" style="margin-top:20px">
@@ -350,6 +351,7 @@ function renderRun(D) {
       const c = clientAt(r, pid);
       if (c.status === "ok") g += cell(c.local_acc);
       else if (c.status === "failed") g += `<td class="failed" title="disconnected">×</td>`;
+      else if (c.status === "late") g += `<td class="late" title="missed the deadline">late</td>`;
       else g += `<td class="idle" title="not sampled">–</td>`;
     }
     g += `</tr>`;
@@ -688,6 +690,70 @@ async function renderCompare() {
     <tbody>${rowsHtml}</tbody></table>`;
 }
 
+// ============================================================================ view: room
+/* Leaderboard of a room run (phase 2): one row per seat (seat = client + 1), sorted
+ * by total impact. Large type: it is shown on the projector. */
+function points(v) {
+  if (v == null || Number.isNaN(v)) return "—";
+  return (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(1);
+}
+
+function renderRoom(D) {
+  const v = $("#view");
+  const board = D.run.leaderboard || [];
+  const done = D.rounds.filter((r) => r.round > 0);
+  if (!done.length) {
+    v.innerHTML = `<div class="empty">The run <b>${esc(D.name)}</b> is starting: the first round ends after the deadline.</div>`;
+    return;
+  }
+  const deadline = +D.run.config["round-timeout"] || 0;
+  const last = D.last;
+  const ok = last.clients_ok || 0, late = last.clients_late || 0, failed = last.clients_failed || 0;
+  const maxAbs = Math.max(1, ...board.map((r) => Math.abs(r.impact || 0)));
+  const rows = board.map((r, i) => {
+    let strip = "";
+    for (let k = 1; k <= D.total; k++) {
+      const round = D.rounds.find((x) => x.round === k);
+      if (!round) { strip += `<i class="future"></i>`; continue; }
+      const c = clientAt(round, r.client);
+      const cls = { ok: "ok", late: "late", failed: "failed" }[c.status] || "idle";
+      const tip = { ok: "on time", late: c.late_by != null ? `late by ${secs(c.late_by)}` : "late",
+        failed: "disconnected" }[c.status] || "absent";
+      strip += `<i class="${cls}" title="round ${k}: ${tip}"></i>`;
+    }
+    const w = (Math.abs(r.impact || 0) / maxAbs) * 50;
+    const bar = (r.impact || 0) >= 0
+      ? `<span class="bar pos" style="left:50%;width:${w}%"></span>`
+      : `<span class="bar neg" style="left:${50 - w}%;width:${w}%"></span>`;
+    return `<tr><td class="rank">${i + 1}</td><td class="seat">${r.client + 1}</td>
+      <td class="num">${r.local_epochs != null ? r.local_epochs : "—"}</td>
+      <td><span class="strip">${strip}</span></td>
+      <td class="num">${pct(r.presence)}</td>
+      <td class="impact"><span class="track">${bar}</span><b>${points(r.impact)}</b></td></tr>`;
+  }).join("");
+  v.innerHTML = `
+    <section class="hero"><p style="font-size:clamp(22px,2.6vw,30px)">Room model at
+      <span class="n">${pct(last.accuracy)}</span>, round ${last.round} of ${D.total}.
+      <span class="alone">${ok} on time, ${late} late, ${failed} disconnected${deadline ? `, ${deadline}${NNBSP}s deadline` : ""}.</span></p></section>
+    <div class="grid2 room">
+      <section class="panel"><h2>Leaderboard</h2>
+        <p class="sub">Impact: accuracy points the room model loses, each round, when the server leaves your update out (summed over the rounds). Measured by the server, on images no client holds.</p>
+        <div class="scrollx"><table class="board"><thead><tr><th>#</th><th>seat</th><th class="num">epochs</th>
+          <th>rounds <span class="key"><i class="ok"></i>on time <i class="late"></i>late <i class="failed"></i>disconnected</span></th>
+          <th class="num">presence</th><th>impact</th></tr></thead><tbody>${rows}</tbody></table></div></section>
+      <section class="panel"><h2>Room model</h2>
+        <p class="sub">Accuracy of the global model, and how many seats made the deadline, round by round.</p>
+        <div id="c-room"></div><div id="n-room"></div></section>
+    </div>`;
+  lineChart($("#c-room"), { xMax: D.total, height: 260, series: [{ name: "room model", color: cssVar("--ink"),
+    width: 3.2, end: true, strong: true, points: D.rounds.map((r) => [r.round, r.accuracy]) }] });
+  const counts = done.map((r) => [r.round, r.clients_ok || 0]);
+  const top = Math.max(1, ...done.map((r) => (r.clients_ok || 0) + (r.clients_late || 0) + (r.clients_failed || 0)));
+  lineChart($("#n-room"), { xMax: D.total, yMax: top, height: 180, yFmt: (y) => String(Math.round(y)),
+    ticks: [0, Math.round(top / 2), top],
+    series: [{ name: "on time", color: cssVar("--c2"), width: 2.4, end: true, dot: true, points: counts }] });
+}
+
 // ============================================================================ shell
 function renderRunPicker() {
   const sel = $("#run");
@@ -728,6 +794,7 @@ function render(dataChanged = true) {
   const D = derive(state.payload);
   if (state.view === "together") renderTogether(D);
   else if (state.view === "run") renderRun(D);
+  else if (state.view === "room") renderRoom(D);
   else if (state.view === "network") {
     // Replay only when a new round arrives (or on view/run change), not at every poll.
     const lastNet = D.rounds.filter((r) => r.round > 0 && r.comm && r.comm.train_sent).slice(-1)[0];

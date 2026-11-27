@@ -8,6 +8,7 @@ ideally with the same number of CPUs as planned per participant:
     uv run python scripts/calibrate.py --phase fedprox                 # 3. effect of FedProx
     uv run python scripts/calibrate.py --phase participation           # 4. partial participation
     uv run python scripts/calibrate.py --phase commcomp                # 5. rounds x local epochs, same budget
+    uv run python scripts/calibrate.py --phase deadline                # 6. local epochs under a deadline
     uv run python scripts/calibrate.py --phase hparams --dataset fashion_mnist --rounds 5   # quick
     uv run python scripts/calibrate.py --phase fedprox --local-epochs 5 --lr 0.01 --tag ep5  # variant
 
@@ -87,12 +88,26 @@ def grid_commcomp(a):
                 }
 
 
+def grid_deadline(a):
+    """Step 3 (scenario B): local epochs under a simulated round deadline (sim-deadline)."""
+    for ds in a.datasets:
+        lr, _ = pick_hparams(ds, a)
+        base = {"dataset": ds, "learning-rate": lr, "partitioning": "dirichlet",
+                "dirichlet-alpha": a.participation_alpha}
+        for deadline in a.deadlines:
+            for ep in a.deadline_epochs:
+                yield f"{ds}_dl{deadline}_ep{ep}", {
+                    **base, "sim-deadline": deadline, "local-epochs": ep,
+                }
+
+
 GRIDS = {
     "hparams": grid_hparams,
     "noniid": grid_noniid,
     "fedprox": grid_fedprox,
     "participation": grid_participation,
     "commcomp": grid_commcomp,
+    "deadline": grid_deadline,
 }
 
 
@@ -330,6 +345,10 @@ def main() -> None:
                    help="rounds x local epochs pairs, e.g. 20x1,10x2,5x4")
     p.add_argument("--commcomp-partitionings", type=lambda s: s.split(","),
                    default=["iid", "dirichlet"])
+    # phase deadline
+    p.add_argument("--deadlines", type=floats, default=[10.0],
+                   help="simulated round deadlines in seconds (5,000 images/s per client)")
+    p.add_argument("--deadline-epochs", type=ints, default=[1, 2, 5, 10])
     p.add_argument("--report-only", action="store_true", help="run nothing, print the report again")
     p.add_argument("--tag", default="", help="separate subfolder: results/calibration/<phase>-<tag>")
     a = p.parse_args()

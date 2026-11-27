@@ -70,8 +70,28 @@ uv run flwr run app --stream --run-config "partitioning='dirichlet' dirichlet-al
 String values in `--run-config` take single quotes. Exercises change only the run
 config, never the code.
 
-The deployed mode (one SuperLink per group, one SuperNode per member) is documented
-with the lead and member notebooks (not written yet).
+## Room federation (deployed mode, phase 2)
+
+One SuperLink for the room (trainers), one SuperNode per participant. Each SuperNode
+sets its seat and its local epochs in its node config; the run sets the number of
+partitions and the round deadline. Hub setup and the trainers' commands:
+[`infra/README.md`](../infra/README.md).
+
+```bash
+# Trainers: SuperLink (Fleet API on 0.0.0.0:9092, HTTP API on 127.0.0.1:9093)
+uv run flower-superlink --insecure --disable-runtime-dependency-installation --port 9093
+# Each participant (what notebooks/join.ipynb runs through flworkshop.room.join)
+uv run flower-supernode --insecure --superlink 127.0.0.1:9092 --port 9107 --node-config "seat=7 local-epochs=2"
+# Trainers: the run, on the `room` connection of ~/.flwr/config.toml
+uv run flwr run app room --stream --run-config "run-name='room' partitioning='pathological' num-partitions=25 round-timeout=25 fraction-evaluate=0.0"
+```
+
+Each round, the server waits `round-timeout` seconds (`strategy.start(timeout=...)`);
+a sampled SuperNode that has not answered is "late" and its update is left out. A
+reply that arrives later is still pulled, only to record the delay. The ServerApp also
+measures each on-time client's impact (leave-one-out: accuracy of the average with and
+without its update, on a 2,000-image test subset) and writes a leaderboard into the
+run's results; the dashboard shows it in the **Room** tab.
 
 ## Configuration (`[tool.flwr.app.config]`, overridable with `--run-config`)
 
@@ -89,6 +109,9 @@ with the lead and member notebooks (not written yet).
 | `partitioning` | `iid` | `iid`, `dirichlet` or `pathological` |
 | `dirichlet-alpha` | 0.1 | Smaller = more unbalanced (0.1: very non-IID) |
 | `classes-per-partition` | 2 | Classes per client with `pathological` |
+| `num-partitions` | 0 | Number of parts the data is split into; 0 = one per simulated client. Room federation: the seats handed out |
+| `round-timeout` | 0.0 | Round deadline in seconds (deployed mode); later updates are left out; 0 = Flower's default (3,600 s) |
+| `sim-deadline` | 0.0 | Simulated round deadline in seconds: each client "trains" 5,000 images per second; a client over it answers late without training; 0 = none |
 | `seed` | 42 | Seed of the partitioning, the initial model and training (reproducible runs) |
 | `data-dir` | `""` | Folder of the `.pt` files; empty = `~/.cache/fl-workshop` |
 | `run-name` | `""` | Name of the run in the dashboard (results file `<runs dir>/<run-name>.json`); empty = `run-<run id>` |
@@ -149,6 +172,13 @@ login node, for example `srun -c 8 --time 02:00:00 uv run python scripts/calibra
   (`fab-format-version = 1`). The exact version is guaranteed by `uv.lock`.
 - **Number of simulated clients.** It is no longer set in `pyproject.toml` but on the
   local SuperLink (command above).
+- **Local SuperLink ports on a shared machine.** The local simulation SuperLink
+  listens on fixed ports (39091, 39093): a second user's `flwr run` would run inside
+  the first user's SuperLink. `viz.setup()` sets `FLWR_LOCAL_SUPERLINK_HTTP_API_PORT`
+  and `FLWR_LOCAL_CONTROL_API_PORT` per user (see `infra/README.md`).
+- **One ClientApp process per message in deployed mode.** Each round, every SuperNode
+  starts a fresh `flwr-clientapp` process (imports, data loading): about 5 s before
+  training starts. Keep the round deadline at 20 s or more.
 - **Data path.** The app runs from an installed copy in `~/.flwr/apps/`, not from this
   folder: a relative path such as `data/` would not work. Hence an absolute default
   folder (`~/.cache/fl-workshop`).
@@ -165,7 +195,8 @@ app/
 │   ├── baselines.py         # "Solo" and "centralised" references
 │   ├── dashboard_server.py  # Local HTTP server of the dashboard (files + JSON API)
 │   ├── paths.py             # Where dashboard/, references/ and results/ live
-│   └── viz.py               # Notebook setup (federation, data check) and dashboard link
+│   ├── room.py              # Phase 2: start / check / stop the participant's SuperNode
+│   └── viz.py               # Notebook setup (federation, per-user ports, data check) and dashboard link
 └── pyproject.toml           # Dependencies, app configuration, CPU PyTorch index
 ```
 

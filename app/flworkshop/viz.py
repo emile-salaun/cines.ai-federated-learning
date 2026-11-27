@@ -35,9 +35,23 @@ ENV = {
     "OMP_NUM_THREADS": "1",
     # CPU only: silences Ray's FutureWarning about GPU visibility in every run log.
     "RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO": "0",
+    # The hub is offline: no usage telemetry to telemetry.flower.ai.
+    "FLWR_TELEMETRY_ENABLED": "0",
 }
 
 _STATE: dict = {}
+
+
+def user_ports() -> dict[str, int]:
+    """Ports of this user's local SuperLink and dashboard, unique per user on a hub.
+
+    Flower's local SuperLink listens on fixed ports (39091, 39093) by default. On a
+    shared machine (JupyterHub), the second user's `flwr run` would then submit its runs
+    to the first user's SuperLink. Each user gets a block of 4 ports derived from the
+    user id instead.
+    """
+    base = 20000 + 4 * (os.getuid() % 10000) if hasattr(os, "getuid") else 39091
+    return {"superlink": base, "control": base + 1, "dashboard": base + 2}
 
 
 def _flwr() -> str:
@@ -74,7 +88,7 @@ def _restart_stale_superlink() -> None:
             time.sleep(2)
 
 
-def setup(num_clients: int = 5, cpus: int = 2, dashboard_port: int = 8050) -> None:
+def setup(num_clients: int = 5, cpus: int = 2, dashboard_port: int | None = None) -> None:
     """Prepare the session: environment, simulated federation, data check, dashboard.
 
     Afterwards `!flwr run app ...` works from the notebook as from a terminal: the
@@ -83,7 +97,10 @@ def setup(num_clients: int = 5, cpus: int = 2, dashboard_port: int = 8050) -> No
     """
     from flworkshop.data import DEFAULT_DATA_DIR
 
+    ports = user_ports()
     os.environ.update(ENV)
+    os.environ.setdefault("FLWR_LOCAL_SUPERLINK_HTTP_API_PORT", str(ports["superlink"]))
+    os.environ.setdefault("FLWR_LOCAL_CONTROL_API_PORT", str(ports["control"]))
     os.environ.setdefault("COLUMNS", "150")   # wide enough for the `flwr ls` table
     bindir = str(Path(sys.executable).parent)
     if not os.environ.get("PATH", "").startswith(bindir):
@@ -103,7 +120,7 @@ def setup(num_clients: int = 5, cpus: int = 2, dashboard_port: int = 8050) -> No
         path = DEFAULT_DATA_DIR / f"{name}.pt"
         state = "OK" if path.exists() else "missing (uv run python scripts/prepare_data.py)"
         print(f"Data {name:<14}: {state}")
-    _STATE["port"] = dashboard_server.start(dashboard_port)
+    _STATE["port"] = dashboard_server.start(dashboard_port or ports["dashboard"])
     dashboard()
 
 

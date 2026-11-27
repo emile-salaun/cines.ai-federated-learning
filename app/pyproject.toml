@@ -39,6 +39,9 @@ local-epochs = 2
 learning-rate = 0.01            # 0.1 diverges (calibration)
 batch-size = 32
 proximal-mu = 0.0              # > 0: FedProx proximal term
+round-timeout = 0.0            # round deadline in seconds: later updates are ignored; 0 = none
+sim-deadline = 0.0             # simulated deadline in seconds (5,000 images/s per client); 0 = none
+num-partitions = 0             # data split into this many parts; 0 = one per simulated client
 save-model = false
 run-name = ""                  # name shown in the dashboard; empty = run-<run id>
 results-file = ""              # absolute path of the results JSON; empty = <runs dir>/<run-name>.json

@@ -93,11 +93,11 @@ flowchart LR
 
     [:octicons-arrow-right-24: Start](02-heterogeneity.md)
 
--   :material-numeric-3-circle-outline:{ .lg } **TBD**
+-   :material-numeric-3-circle-outline:{ .lg } **{% if scenario == "A" %}Compute vs communication{% else %}Beat the deadline{% endif %}**
 
     ---
 
-    {% if scenario == "A" %}Same compute budget, fewer or more rounds: when does talking less pay off? The group splits the runs.{% else %}To be determined.{% endif %}
+    {% if scenario == "A" %}Same compute budget, fewer or more rounds: when does talking less pay off? The group splits the runs.{% else %}Each round has a deadline: how much local work pays off? You split the runs with your neighbours.{% endif %}
 
     <span class="ws-badge">:material-clock-outline: 10 min</span>
     <span class="ws-badge">:material-account-group-outline: Group</span>
@@ -160,8 +160,9 @@ Each run changes only the `--run-config` string. These are all the keys:
 | `partitioning` | `iid`, `dirichlet`, `pathological` | `iid` | [Step 1](01-first-run.md), [Step 2](02-heterogeneity.md) |
 | `dirichlet-alpha` | > 0; smaller = more uneven | `0.1` | [Step 2](02-heterogeneity.md), [Step 3](03-compute-vs-communication.md) |
 | `classes-per-partition` | Classes per client for `pathological` | `2` | [Step 1](01-first-run.md) |
-| `num-server-rounds` | Number of rounds | `10` | [Step 3](03-compute-vs-communication.md) |
+| `num-server-rounds` | Number of rounds | `10` | {% if scenario == "A" %}[Step 3](03-compute-vs-communication.md){% else %}–{% endif %} |
 | `local-epochs` | Local epochs per round | `2` | [Step 3](03-compute-vs-communication.md) |
+| `sim-deadline` | Simulated round deadline in seconds (each client trains 5,000 images per second); `0` = none | `0` | {% if scenario == "A" %}–{% else %}[Step 3](03-compute-vs-communication.md){% endif %} |
 | `fraction-train` | Share of clients sampled per round, 0 to 1 | `1.0` | [Going further](05-debrief.md) |
 | `dropout-rate` | Probability that a sampled client fails, 0 to 1 | `0.0` | [Going further](05-debrief.md) |
 | `proximal-mu` | ≥ 0; > 0 turns on FedProx | `0.0` | [Going further](05-debrief.md) |

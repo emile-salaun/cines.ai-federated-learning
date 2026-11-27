@@ -4,7 +4,7 @@ hide:
   - toc
 ---
 
-# 3. TBD
+# {% if scenario == "A" %}3. Compute vs communication{% else %}3. Beat the deadline{% endif %}
 
 <div class="ws-meta" markdown="span">
   <span class="ws-badge">:material-flag-outline: Step 3 / 5</span>
@@ -14,8 +14,8 @@ hide:
 
 --8<-- "hands-on-stepper.md"
 
-<!-- Scenario switch: [project.extra] scenario in zensical.toml. In scenario B this
-     step is to be determined; the exercise below is the scenario A version. -->
+<!-- Scenario switch: [project.extra] scenario in zensical.toml. Scenario A: same
+     budget, more or fewer rounds. Scenario B: local epochs under a round deadline. -->
 {% if scenario == "A" %}
 
 !!! abstract "Goal"
@@ -105,11 +105,91 @@ final accuracy. The 10 × 2 row comes from step 2.
 
 {% else %}
 
-<!-- TODO: scenario B step 3 to be determined -->
+!!! abstract "Goal"
 
-!!! warning "To be determined"
+    Each round now has a **deadline**. A client that has not finished its local training
+    in time is left out of that round. How many local epochs should the clients do?
 
-    This step is being redesigned. Go on to step 4.
+In step 2 everyone waited for the slowest client. Real systems do not wait: they set a
+deadline and drop the late updates. In this simulation every client trains
+**5,000 images per simulated second**, and the deadline is **10 simulated seconds**, so
+the result does not depend on how busy the hub is.
+
+## 3.1 Predict
+
+With Dirichlet data, one client holds far more images than the others. Before running,
+write down with your neighbours:
+
+- which clients miss the deadline with 5 local epochs, and with 10;
+- which number of local epochs gives the best model after 10 rounds.
+
+## 3.2 Split the runs with your neighbours
+
+Each person runs one line (copy it into a new notebook cell), then shares the result.
+The 2-epoch run is step 2's `dirichlet` run: with 2 epochs, every client makes the
+deadline.
+
+| Run | Local epochs | Deadline |
+|:---:|:---:|:---:|
+| 1 | 1 | 10 s |
+| 2 | 5 | 10 s |
+| 3 | 10 | 10 s |
+
+```python
+# Run 1
+!flwr run app --stream --run-config "run-name='deadline_ep1' partitioning='dirichlet' dirichlet-alpha=0.1 sim-deadline=10.0 local-epochs=1"
+# Run 2
+!flwr run app --stream --run-config "run-name='deadline_ep5' partitioning='dirichlet' dirichlet-alpha=0.1 sim-deadline=10.0 local-epochs=5"
+# Run 3
+!flwr run app --stream --run-config "run-name='deadline_ep10' partitioning='dirichlet' dirichlet-alpha=0.1 sim-deadline=10.0 local-epochs=10"
+```
+
+!!! checkpoint "You should see"
+
+    The log ends at `[ROUND 10/10]`. In the **The run** tab, the participation grid
+    marks the clients that missed the deadline as `late`, in every round.
+
+## 3.3 Fill in the table
+
+The **The run** tab gives the clients on time; the **Compare** tab gives the final
+accuracy. The 2-epoch row comes from step 2.
+
+| Local epochs | Clients on time (of 5) | Final accuracy |
+|:---:|:---:|:---:|
+| 1 | | |
+| 2 (step 2) | 5 | |
+| 5 | | |
+| 10 | | |
+
+## Discuss
+
+1. Which client is the first to miss the deadline, and why that one?
+2. What does the federation lose when that client is left out? Look at the
+   **Solo or together?** tab of step 2.
+3. Few epochs: little work per round. Many epochs: late clients. Where is the best
+   trade-off here?
+
+!!! tip "Keep this in mind for phase 2"
+
+    In the room federation, you pick your own local epochs, and the deadline is real.
+    Your answer to question 3 is your strategy.
+
+## Done?
+
+<div class="ws-checklist" markdown>
+
+- [ ] My run reached round 10
+- [ ] Our table is filled in
+- [ ] I know how many local epochs I will pick in phase 2
+
+</div>
+
+??? question "Stuck?"
+
+    - **Accuracy stays at about 10 %**: every client missed the deadline, so the model
+      never changed. Check `sim-deadline=10.0` and the number of local epochs.
+    - **No solo or centralised curves for these runs**: expected, the references exist
+      only for the default settings. Use the **Compare** tab.
 
 {% endif %}
 

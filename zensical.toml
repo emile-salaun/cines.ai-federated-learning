@@ -31,7 +31,7 @@ nav = [
     { "0. Setup" = "hands-on/00-setup.md" },
     { "1. First run" = "hands-on/01-first-run.md" },
     { "2. Heterogeneity" = "hands-on/02-heterogeneity.md" },
-    { "3. TBD" = "hands-on/03-compute-vs-communication.md" },
+    { "3. Beat the deadline" = "hands-on/03-compute-vs-communication.md" },   # A: renamed by docs.yml
     { "4. Room federation" = "hands-on/04-room-federation.md" },
     { "5. Debrief" = "hands-on/05-debrief.md" },
   ] },
